@@ -1,0 +1,132 @@
+
+mat-hint{
+    color:floralwhite;
+}
+mat-card{
+    width: 100%;
+}
+.title{
+    margin-top: 5px;
+    color:#011F3D;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-style:normal;
+    font-size: 15px;
+}
+mat-card-title{
+    background-color:white;
+}
+.searchBar{
+    width: 100%;
+    /*background-color: #712DD2;*/
+    /*background-color: #DABFFC;*/
+    background-color: #058192;
+    /*background-color: #7E96AE;*/
+
+}
+.no-bottom {
+    margin-bottom: -1.25em !important;
+}
+mat-icon{
+    color: black;
+}
+.form-container-repos{
+    margin-top: 8px;
+}
+.form-container-topic{
+    margin-top: 8px;
+}
+button{
+    border: none;
+}
+.fullpage{
+    width: 100%;
+    height: fit-content;
+    display: contents;
+    align-content: center;
+    align-items: center;
+    background-color: rgb(238, 232, 215);
+}
+.searchBy{
+    width: 100%;
+    /*background-color: rgb(238, 232, 215);*/
+}
+.toggles{
+    margin-top: 15px;
+    margin-left: 25px;
+}
+.toggleButtons{
+    height:40px;
+}
+.repoLogo{
+    margin-top: -10px;
+    width: 30px;
+}
+input[type=submit]{
+    background: url('../assets/images/search-icon.svg');
+}
+.repoHeading{
+    margin-left: 150px;
+}
+.topicHeading{
+    margin-left: 150px;
+}
+.submitButton{
+    margin-top: 10px;
+}
+.loading{
+    width: 200px;
+    margin-top: 50px;
+    margin-left: 700px;
+}
+.filterDiv{
+    margin-top: 10px;
+}
+.filter{
+    font-size: 14px;
+    width: 100%;
+    margin-bottom: -1.25em !important;
+}
+.filterButton{
+    width: fit-content;
+}
+.table{
+    margin-top: 10px;
+    margin-left: 20px;
+    width: 98%;
+    height:auto;
+    overflow: auto;
+    /*background-color: rgb(255, 246, 212);*/
+}
+th{
+    font-weight: bold;
+    align-content: center;
+    backface-visibility: hidden;
+    color: aliceblue;
+}
+.ellipsed{
+    width: 250px;
+    height: 40px;
+    padding: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: 0.5s;
+}
+.ellipsed:hover{
+    cursor: pointer;
+    overflow: hidden;
+    box-shadow: 0 0 3px black;
+    margin-top: -10px;
+}
+body{
+    width: 100%;
+    height: 100%;
+}
+.logo{
+    margin-left: 20px;
+    width: 65px;
+    height: 65px;
+    padding: 10px;
+}
+.tableRow{
+    background-color:#1C5569;
+}

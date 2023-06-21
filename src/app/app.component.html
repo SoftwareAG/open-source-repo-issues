@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="css" type="text/css" href="../../node_modules/@softwareag/dlt-components/css/delite.min.css"/>
+  <title>Github Repository Issues</title>
+</head>
+
+<body>
+  <div class="fullpage">
+    <div *ngIf="isLoading">
+      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+    </div>
+    <mat-card>
+      <mat-card-title>
+        <div class="row">
+          <img class="col-sm-1 logo" src="../assets/images/softwareag LOGO.png" alt="Softwareag Logo" />
+          <div class="col-sm-1 title">
+            <div class="row">Github Repository</div>
+            <div class="row" style="margin-top: -10px;">Issues</div>
+          </div>
+          <div class="col-sm-1 toggles">
+            <div class="d-flex justify-content-center toggleButtons">
+              <mat-button-toggle-group #group="matButtonToggleGroup" [value]="toggleVal"
+                (change)="onToggleChange(group.value)">
+                <mat-button-toggle matTooltip="Search by Repository Name(s)" value="Repo"><img class="repoLogo"
+                    src="../assets/images/repo-icon.png" alt="Repo Name" /></mat-button-toggle>
+                <mat-button-toggle matTooltip="Search by Topic Name" value="Topic"><img class="repoLogo"
+                    src="../assets/images/hashtagTopic.png" alt="Topic Name" /></mat-button-toggle>
+              </mat-button-toggle-group>
+            </div>
+          </div>
+          <div class="col-sm-5 form-container-repos" *ngIf="toggleVal == 'Repo'">
+            <form (submit)="getRepos(Repos.value)">
+              <div class="row RepocardContent">
+                <div class="col-sm-12 d-flex justify-content-center">
+                  <mat-form-field class="col-11 no-bottom">
+                    <input matInput #Repos placeholder="Enter comma seperated Repositories- Eg:Repo1,Repo2,.."
+                      class="col-sm-12" />
+                    <button matSuffix type="submit" class="dlt-tooltip dlt-tooltip-top-start" aria-description="Informative text about the button">
+                      <mat-icon>search</mat-icon>
+                    </button>
+                  </mat-form-field>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="col-sm-5 form-container-topic" *ngIf="toggleVal == 'Topic'">
+            <form (submit)="getTopicIssues(Topic.value)">
+              <div class="row RepocardContent">
+                <div class="col-sm-12 d-flex justify-content-center">
+                  <mat-form-field class="col-11 no-bottom">
+                    <input matInput #Topic placeholder="Enter Topic Name" class="col-sm-12" />
+                    <button matSuffix type="submit" matTooltip="Search">
+                      <mat-icon>search</mat-icon>
+                    </button>
+                  </mat-form-field>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="col-sm-3 d-flex justify-content-end filterDiv">
+            <div class="col-sm-2 filterButton">
+              <button mat-icon-button matTooltip="Filter" (click)="onClickedFilter()"
+                *ngIf="submitClicked">
+                <mat-icon>filter_list</mat-icon>
+              </button>
+            </div>
+            <div class="col-sm-10">
+              <mat-form-field class="filter" *ngIf="clickedFilter">
+                <input matInput (keyup)="applyFilter($event)" placeholder="Filter" />
+                <mat-icon matSuffix>filter_list</mat-icon>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </mat-card-title>
+    </mat-card>
+    <div class="d-flex justify-content-start searchBy">
+      
+    </div>
+
+    <div class="table" *ngIf="submitClicked">
+      <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+
+        <ng-container matColumnDef="serial">
+          <th mat-header-cell *matHeaderCellDef>S.No</th>
+          <td mat-cell *matCellDef="let element">{{ element.SNo }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="repository">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>REPOSITORY</th>
+          <td mat-cell *matCellDef="let element">{{ element.repository }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="issue_number">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>ISSUE NUM</th>
+          <td mat-cell *matCellDef="let element">
+            <a href="{{ element.issue_url }}" target="_blank"  matTooltip="Visit Issue">{{element.number}}</a>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="title" class="col-sm-2">
+          <th mat-header-cell *matHeaderCellDef>TITLE</th>
+          <td mat-cell (click)="titleDialog(element.title)" *matCellDef="let element">
+            <div class="ellipsed">{{ element.title }}</div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="body">
+          <th mat-header-cell *matHeaderCellDef>BODY</th>
+          <td mat-cell (click)="bodyDialog(element.body)" *matCellDef="let element">
+            <div class="ellipsed">{{ element.body }}</div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="user_name">
+          <th mat-header-cell *matHeaderCellDef>USER NAME</th>
+          <td mat-cell *matCellDef="let element">{{ element.user.login }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="user_type">
+          <th mat-header-cell *matHeaderCellDef>USER TYPE</th>
+          <td mat-cell *matCellDef="let element">{{ element.user.type }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="lable_name">
+          <th mat-header-cell *matHeaderCellDef>LABLE NAME</th>
+          <td mat-cell *matCellDef="let element">
+            <span *ngFor="let lable of element.lables">{{ lable.name }}
+            </span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="created_at">
+          <th mat-header-cell *matHeaderCellDef>CREATED AT</th>
+          <td mat-cell *matCellDef="let element">{{ element.created_at }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="updated_at">
+          <th mat-header-cell *matHeaderCellDef>UPDATED AT</th>
+          <td mat-cell *matCellDef="let element">{{ element.updated_at }}</td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="tableRow"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+      <!--div *ngIf="isLoading && submitClicked" class="loading">
+        <mat-spinner></mat-spinner>
+      </div!-->
+      <mat-paginator [pageSizeOptions]="[5, 10, 20, 50, 100]" showFirstLastButtons aria-label="Select page of Issues">
+      </mat-paginator>
+    </div>
+  </div>
+  <script src="../../node_modules/@softwareag/dlt-components/js/delite.min.js"></script>
+</body>
+
+</html>
