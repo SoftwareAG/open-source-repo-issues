@@ -34,7 +34,6 @@ export class AppComponent {
   lable_names: string[] = [];
   index:number=0;
   isLoading:boolean | undefined;
-  SearchBy= new FormControl('');
   constructor(private http: HttpClient,public dialog: MatDialog){}
   displayedColumns = ['serial','repository','issue_number', 'title','body','user_name','user_type','lable_name','created_at','updated_at'];
   @ViewChild(MatPaginator) paginator!: MatPaginator;
