@@ -25,6 +25,7 @@ export interface issueDetails{
 })
 
 export class AppComponent {
+  searchString:string|undefined;
   toggleVal:string ='Topic';
   submitClicked: boolean = false;
   clickedFilter:boolean=false;

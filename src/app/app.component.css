@@ -1,3 +1,6 @@
+input[type=text]:focus{
+    border: none;
+}
 mat-card{
     width: 100%;
 }
@@ -6,7 +9,12 @@ mat-card{
     color:#011F3D;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     font-style:normal;
-    font-size: 15px;
+    font-size: 25px;
+    width: 250px;
+}
+.titleHeading{
+    margin-left: -10px;
+    margin-top: 10px;
 }
 .no-bottom {
     margin-bottom: -1.25em !important;
@@ -16,7 +24,7 @@ mat-icon{
     color: black;
 }
 .form-container{
-    margin-top: 20px;
+    margin-top: 15px;
 }
 button{
     border: none;
@@ -35,20 +43,22 @@ button{
 }
 .toggles{
     margin-top: 15px;
-    margin-left: 25px;
+    margin-left:5%;
 }
 .toggleButtons{
     height:40px;
 }
 .repoLogo{
     margin-top: -10px;
-    width: 30px;
+    width: 100%;
 }
-.repoHeading{
-    margin-left: 150px;
+.repoBtn{
+    border-top-left-radius: 25px;
+    border-bottom-left-radius: 25px;
 }
-.topicHeading{
-    margin-left: 150px;
+.topicBtn{
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
 }
 .submitButton{
     margin-top: 10px;
@@ -58,9 +68,6 @@ button{
     margin-top: 50px;
     margin-left: 700px;
 }
-/*.filterDiv{
-    margin-top: 20px;
-}*/
 .filter{
     font-size: 14px;
     width: 100%;

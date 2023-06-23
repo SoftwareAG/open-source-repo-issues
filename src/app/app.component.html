@@ -17,61 +17,55 @@
       <mat-card-title>
         <div class="row">
           <img class="col-sm-1 logo" src="../assets/images/softwareag LOGO.png" alt="Softwareag Logo" />
-          <div class="col-sm-1 title">
-            <div class="row">Github Repository</div>
-            <div class="row" style="margin-top: -10px;">Issues</div>
+          <div class="col-sm-2 title justify-content-start" style="vertical-align: middle;">
+            <div class="justify-content-start titleHeading">Repository Issues</div>
           </div>
-          <div class="col-sm-1 toggles">
-            <div class="d-flex justify-content-center toggleButtons">
-              <mat-button-toggle-group #group="matButtonToggleGroup" [value]="toggleVal"
-                (change)="onToggleChange(group.value)">
-                <mat-button-toggle matTooltip="Search by Repository Name(s)" value="Repo"><img class="repoLogo"
-                    src="../assets/images/repo-icon.png" alt="Repo Name" /></mat-button-toggle>
-                <mat-button-toggle matTooltip="Search by Topic Name" value="Topic"><img class="repoLogo"
-                    src="../assets/images/hashtagTopic.png" alt="Topic Name" /></mat-button-toggle>
-              </mat-button-toggle-group>
+          <div class="col-sm-1 toggles justify-content-center">
+            <div class="d-flex justify-content-center">
+              <div class="btn-group" role="group" aria-label="Toggles">
+                <button mat-raised-button type="button" class="btn" data-toggle="tooltip" title="Search by Repo names"
+                  (click)="onToggleChange('Repo')">Repos</button>
+                <button mat-raised-button type="button" class="btn" data-toggle="tooltip" title="Search by Topic name"
+                  (click)="onToggleChange('Topic')">Topic</button>
+              </div>
             </div>
           </div>
-          <div class="col-sm-5 form-container dlt-form-item dlt-search dlt-search--async dlt-search--open"
-            *ngIf="toggleVal == 'Repo'">
-            <div class="dlt-form-group">
-              <form role="search" style="width: 100%;" (submit)="getRepos(repos.value)">
-                <label for="header-search" class="visually-hidden">
-                  <span>Repos</span>
-                </label>
-                <input type="text" id="header-search" #repos required class="dlt-text-input dlt-text-search"
-                  placeholder="Repo1,Repo2,.." />
-                <button class="dlt-button dlt-button-primary" type="submit">
-                  <i class="dlt-icon-search dlt-icon-lg"></i>
-                </button>
-              </form>
-            </div>
-          </div>
-          <div class="col-sm-5 form-container dlt-form-item dlt-search dlt-search--async dlt-search--open"
-            *ngIf="toggleVal == 'Topic'">
-            <div class="dlt-form-group">
-              <form role="search" style="width: 100%;" (submit)="getTopicIssues(Topic.value)">
-                <label for="header-search" class="visually-hidden">
-                  <span>Topic</span>
-                </label>
-                <input type="text" id="header-search" #Topic required class="dlt-text-input dlt-text-search"
-                  placeholder="Topic Name" />
-                <button class="dlt-button dlt-button-primary" type="submit">
-                  <i class="dlt-icon-search dlt-icon-lg"></i>
-                </button>
-              </form>
-            </div>
-          </div>
-          <div class="col-sm-4 d-flex justify-content-center form-container" *ngIf="submitClicked">
-            <div class="col-sm-10 d-flex justify-content-center">
-              <div class="dlt-form-item dlt-search dlt-search--async dlt-search--open" style="width: 300px;">
-                <div class="dlt-form-group dlt-tooltip dlt-tooltip-top-start" aria-description="Informative text about the button">
-                  <input type="text" id="header-search" class="dlt-text-input dlt-text-search"
-                    (keyup)="applyFilter($event)" placeholder="Filter" />
-                  <button class="dlt-button dlt-button-primary" disabled="true">
-                    <i class="dlt-icon-filter dlt-icon-lg"></i>
-                  </button>
+          <div class="col-sm-4 form-container d-flex justify-content-center" *ngIf="toggleVal == 'Repo'">
+            <form (submit)="getRepos(repos.value)" style="width: 75%">
+              <div class="input-group mb-3"
+                style="width: 100%; border-radius: 25px; border: 1px solid black;height: 40px;">
+                <input type="text" #repos required class="form-control" placeholder="repo1,repo2,..." aria-label="repos"
+                  aria-describedby="basic-addon2"
+                  style="border-top-left-radius:25px; border-bottom-left-radius:25px; height:100%; border-right: none;">
+                <div class="input-group-append" style="height: 100%;">
+                  <button class="btn" type="submit" style="height: 100%;"><mat-icon>search</mat-icon></button>
                 </div>
+              </div>
+            </form>
+          </div>
+          <div class="col-sm-4 form-container d-flex justify-content-center" *ngIf="toggleVal == 'Topic'">
+            <form (submit)="getTopicIssues(Topic.value)" style="width: 75%">
+              <div class="input-group mb-3"
+                style="width: 100%; border-radius: 25px; border: 1px solid black;height: 40px;">
+                <input type="text" #Topic required class="form-control" placeholder="topic-name" aria-label="topic"
+                  aria-describedby="basic-addon2"
+                  style="border-top-left-radius:25px; border-bottom-left-radius:25px; height:100%; border-right: none;">
+                <div class="input-group-append" style="height: 100%;">
+                  <button class="btn" type="submit" style="height: 100%;"><mat-icon>search</mat-icon></button>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="col-sm-2 form-container d-flex justify-content-end" *ngIf="submitClicked">
+            <div class="input-group mb-3"
+              style="width: 75%; border-radius: 25px; border: 1px solid black;height: 40px;">
+              <input type="text" class="form-control" placeholder="filter" aria-label="filter"
+                aria-describedby="basic-addon2"
+                style="border-top-left-radius:25px; border-bottom-left-radius:25px; height:100%; border-right: none;"
+                (keyup)="applyFilter($event)">
+              <div class="input-group-append" style="height: 100%;">
+                <button class="btn" type="submit" style="height: 100%;"
+                  disabled><mat-icon>filter_list</mat-icon></button>
               </div>
             </div>
           </div>
