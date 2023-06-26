@@ -35,11 +35,9 @@ button{
     display: contents;
     align-content: center;
     align-items: center;
-    background-color: rgb(238, 232, 215);
 }
 .searchBy{
     width: 100%;
-    /*background-color: rgb(238, 232, 215);*/
 }
 .toggles{
     margin-top: 15px;

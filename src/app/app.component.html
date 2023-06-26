@@ -9,7 +9,7 @@
 </head>
 
 <body>
-  <div class="fullpage">
+  <div class="fullpage justify-content-center">
     <div *ngIf="isLoading">
       <mat-progress-bar mode="indeterminate"></mat-progress-bar>
     </div>
@@ -17,80 +17,151 @@
       <mat-card-title>
         <div class="row">
           <img class="col-sm-1 logo" src="../assets/images/softwareag LOGO.png" alt="Softwareag Logo" />
-          <div class="col-sm-2 title justify-content-start" style="vertical-align: middle;">
-            <div class="justify-content-start titleHeading">Repository Issues</div>
+          <div class="col-sm-2 title justify-content-start" style="vertical-align: middle">
+            <div class="justify-content-start titleHeading">
+              Repository Issues
+            </div>
           </div>
           <div class="col-sm-1 toggles justify-content-center">
             <div class="d-flex justify-content-center">
               <div class="btn-group" role="group" aria-label="Toggles">
                 <button mat-raised-button type="button" class="btn" data-toggle="tooltip" title="Search by Repo names"
-                  (click)="onToggleChange('Repo')">Repos</button>
+                  (click)="onToggleChange('Repo')">
+                  Repos
+                </button>
                 <button mat-raised-button type="button" class="btn" data-toggle="tooltip" title="Search by Topic name"
-                  (click)="onToggleChange('Topic')">Topic</button>
+                  (click)="onToggleChange('Topic')">
+                  Topic
+                </button>
               </div>
             </div>
           </div>
           <div class="col-sm-4 form-container d-flex justify-content-center" *ngIf="toggleVal == 'Repo'">
             <form (submit)="getRepos(repos.value)" style="width: 75%">
-              <div class="input-group mb-3"
-                style="width: 100%; border-radius: 25px; border: 1px solid black;height: 40px;">
+              <div class="input-group mb-3" style="
+                    width: 100%;
+                    border-radius: 25px;
+                    border: 1px solid black;
+                    height: 40px;
+                  ">
                 <input type="text" #repos required class="form-control" placeholder="repo1,repo2,..." aria-label="repos"
-                  aria-describedby="basic-addon2"
-                  style="border-top-left-radius:25px; border-bottom-left-radius:25px; height:100%; border-right: none;">
-                <div class="input-group-append" style="height: 100%;">
-                  <button class="btn" type="submit" style="height: 100%;"><mat-icon>search</mat-icon></button>
+                  aria-describedby="basic-addon2" style="
+                      border-top-left-radius: 25px;
+                      border-bottom-left-radius: 25px;
+                      height: 100%;
+                      border-right: none;
+                    " />
+                <div class="input-group-append" style="height: 100%">
+                  <button class="btn" type="submit" style="height: 100%">
+                    <mat-icon>search</mat-icon>
+                  </button>
                 </div>
               </div>
             </form>
           </div>
           <div class="col-sm-4 form-container d-flex justify-content-center" *ngIf="toggleVal == 'Topic'">
             <form (submit)="getTopicIssues(Topic.value)" style="width: 75%">
-              <div class="input-group mb-3"
-                style="width: 100%; border-radius: 25px; border: 1px solid black;height: 40px;">
+              <div class="input-group mb-3" style="
+                    width: 100%;
+                    border-radius: 25px;
+                    border: 1px solid black;
+                    height: 40px;
+                  ">
                 <input type="text" #Topic required class="form-control" placeholder="topic-name" aria-label="topic"
-                  aria-describedby="basic-addon2"
-                  style="border-top-left-radius:25px; border-bottom-left-radius:25px; height:100%; border-right: none;">
-                <div class="input-group-append" style="height: 100%;">
-                  <button class="btn" type="submit" style="height: 100%;"><mat-icon>search</mat-icon></button>
+                  aria-describedby="basic-addon2" style="
+                      border-top-left-radius: 25px;
+                      border-bottom-left-radius: 25px;
+                      height: 100%;
+                      border-right: none;
+                    " />
+                <div class="input-group-append" style="height: 100%">
+                  <button class="btn" type="submit" style="height: 100%">
+                    <mat-icon>search</mat-icon>
+                  </button>
                 </div>
               </div>
             </form>
           </div>
           <div class="col-sm-2 form-container d-flex justify-content-end" *ngIf="submitClicked">
-            <div class="input-group mb-3"
-              style="width: 75%; border-radius: 25px; border: 1px solid black;height: 40px;">
+            <div class="input-group mb-3" style="
+                  width: 75%;
+                  border-radius: 25px;
+                  border: 1px solid black;
+                  height: 40px;
+                ">
               <input type="text" class="form-control" placeholder="filter" aria-label="filter"
-                aria-describedby="basic-addon2"
-                style="border-top-left-radius:25px; border-bottom-left-radius:25px; height:100%; border-right: none;"
-                (keyup)="applyFilter($event)">
-              <div class="input-group-append" style="height: 100%;">
-                <button class="btn" type="submit" style="height: 100%;"
-                  disabled><mat-icon>filter_list</mat-icon></button>
+                aria-describedby="basic-addon2" style="
+                    border-top-left-radius: 25px;
+                    border-bottom-left-radius: 25px;
+                    height: 100%;
+                    border-right: none;
+                  " (keyup)="applyFilter($event)" />
+              <div class="input-group-append" style="height: 100%">
+                <button class="btn" type="submit" style="height: 100%" disabled>
+                  <mat-icon>filter_list</mat-icon>
+                </button>
               </div>
             </div>
           </div>
         </div>
       </mat-card-title>
     </mat-card>
-    <div class="d-flex justify-content-start searchBy">
+    <br />
+    <div class="d-flex justify-content-center" *ngIf="!submitClicked" style="width: 80%; margin-left: 10%">
+      <mat-card>
+          <mat-card-title class="d-flex justify-content-center">
+            <h1>How to use</h1>
+          </mat-card-title>  
+        <mat-card-content class="d-flex justify-content-center">
+          <div>
+            <p>
+              This application is designed to provide you Open Issues for Software AG
+              repositories.
+            </p>
+            <p>
+              You can start searching with a topic name or repository name(S)
+            </p>
+            <h2>Steps:</h2>
+            <ol>
+              <li>Select how you want to search (Repository/Topic name)</li>
+              <li>Type the search field as show in the search bar and click 'search icon' or press ENTER</li>
+              <li>Please wait patiently</li>
+              <li>Once the data is loaded, you can filter data by:</li>
+              <ul>
+                <li>Repository name</li>
+                <li>Issue Number</li>
+                <li>Title</li>
+                <li>Body</li>
+                <li>Created/Updated Date Time</li>
+              </ul>
+              <li>You can SORT the data with respect to Repository name</li>
+              <ul>
+                <li>Hover over Repository header</li>
+                <li>Click on the Arrow button</li>
+              </ul>
+            </ol>
+          </div>
+        </mat-card-content>
+      </mat-card>
     </div>
     <div class="table" *ngIf="submitClicked">
       <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
-
         <ng-container matColumnDef="serial">
           <th mat-header-cell *matHeaderCellDef>S.No</th>
           <td mat-cell *matCellDef="let element">{{ element.SNo }}</td>
         </ng-container>
 
         <ng-container matColumnDef="repository">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>REPOSITORY</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>
+            REPOSITORY
+          </th>
           <td mat-cell *matCellDef="let element">{{ element.repository }}</td>
         </ng-container>
 
         <ng-container matColumnDef="issue_number">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>ISSUE NUM</th>
+          <th mat-header-cell *matHeaderCellDef>ISSUE NUM</th>
           <td mat-cell *matCellDef="let element">
-            <a href="{{ element.issue_url }}" target="_blank" matTooltip="Visit Issue">{{element.number}}</a>
+            <a href="{{ element.issue_url }}" target="_blank" matTooltip="Visit Issue">{{ element.number }}</a>
           </td>
         </ng-container>
 
