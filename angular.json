@@ -25,15 +25,12 @@
               "src/assets"
             ],
             "styles": [
-              "node_modules/@softwareag/dlt-components/css/delite.min.css",
-              "node_modules/@softwareag/dlt-icons/Font/css/dlt-icons-font.css",
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.css"
             ],
             "scripts": [
-              "node_modules/@softwareag/dlt-components/js/delite.min.js"
-            ]
+]
           },
           "configurations": {
             "production": {
