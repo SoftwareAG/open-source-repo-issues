@@ -1,6 +1,3 @@
-input[type=text]:focus{
-    border: none;
-}
 mat-card{
     width: 100%;
 }
@@ -15,10 +12,6 @@ mat-card{
 .titleHeading{
     margin-left: -10px;
     margin-top: 10px;
-}
-.no-bottom {
-    margin-bottom: -1.25em !important;
-    /*height:75px;*/
 }
 mat-icon{
     color: black;
@@ -36,40 +29,9 @@ button{
     align-content: center;
     align-items: center;
 }
-.searchBy{
-    width: 100%;
-}
 .toggles{
     margin-top: 15px;
     margin-left:5%;
-}
-.toggleButtons{
-    height:40px;
-}
-.repoLogo{
-    margin-top: -10px;
-    width: 100%;
-}
-.repoBtn{
-    border-top-left-radius: 25px;
-    border-bottom-left-radius: 25px;
-}
-.topicBtn{
-    border-top-right-radius: 25px;
-    border-bottom-right-radius: 25px;
-}
-.submitButton{
-    margin-top: 10px;
-}
-.loading{
-    width: 200px;
-    margin-top: 50px;
-    margin-left: 700px;
-}
-.filter{
-    font-size: 14px;
-    width: 100%;
-    margin-bottom: -1.25em !important;
 }
 .table{
     margin-top: 10px;

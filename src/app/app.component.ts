@@ -1,22 +1,10 @@
 import {Component, ViewChild, Inject} from '@angular/core';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { catchError, isEmpty, throwError } from 'rxjs';
-import { FormControl } from '@angular/forms';
 
-export interface issueDetails{
-  repository:string;
-  title:string;
-  body:string;
-  user_name:string;
-  user_type:string;
-  created_at:string;
-  updated_at:string;
-  lables:any;
-}
 
 @Component({
   selector: 'app-root',
@@ -25,15 +13,13 @@ export interface issueDetails{
 })
 
 export class AppComponent {
-  searchString:string|undefined;
+
   toggleVal:string ='Topic';
   submitClicked: boolean = false;
   clickedFilter:boolean=false;
   issues:any;
-  //lables:any;
   dataSource:any;
   lable_names: string[] = [];
-  index:number=0;
   isLoading:boolean | undefined;
   constructor(private http: HttpClient,public dialog: MatDialog){}
   displayedColumns = ['serial','repository','issue_number', 'title','body','user_name','user_type','lable_name','created_at','updated_at'];
@@ -47,33 +33,31 @@ export class AppComponent {
   getRepos(Repos: string){
     this.submitClicked=true;
     this.isLoading=true;
-    let ROOT_URL='https://env903052.apigw-aw-eu.webmethods.io/gateway/GithubIssuesList/1.0/github/issues';
-    console.log("root_url:",ROOT_URL);
-    console.log("repos: ",Repos);
+    let ROOT_URL='https://presalesglobaldev.apigw-aw-eu.webmethods.io/gateway/Github%20Issues/1.0/github/issues';
+    console.log("searching repos: ",Repos);
     const headers={'Contet-Type':'application/json'}
     this.http.get<JSON>(ROOT_URL,{headers:headers, params:{repos:Repos}}).subscribe((data)=>this.displayIssues(data));
   }
   getTopicIssues(Topic:string){
     this.submitClicked=true;
     this.isLoading=true;
-    let ROOT_URL='https://env903052.apigw-aw-eu.webmethods.io/gateway/GithubIssuesList/1.0/github/topicIssues';
-    console.log("root_url:",ROOT_URL);
-    console.log("repos: ",Topic);
+    let ROOT_URL='https://presalesglobaldev.apigw-aw-eu.webmethods.io/gateway/Github%20Issues/1.0/github/topicIssues';
+    console.log("searching Topic: ",Topic);
     const headers={'Contet-Type':'application/json'}
     this.http.get<JSON>(ROOT_URL,{headers:headers, params:{topic:Topic}}).subscribe((data)=>this.displayIssues(data));
   }
   displayIssues(data:any){
-    console.log("data:",data);
+    console.log("data from API:",data);
     this.issues=data.finalOut;
     let len=this.issues.length;
-    console.log(len);
+    //console.log(len);
     for(let i=0;i<len;i++){
       if(!(this.issues[i].hasOwnProperty("lables"))){
         this.issues[i]["lables"]=[{"name":" "}];
-        console.log("adding empty lable names:",this.issues[i].lables[0].name);
+        //console.log("adding empty lable names:",this.issues[i].lables[0].name);
       }
       this.issues[i]["SNo"]=i+1;
-      console.log("S.No added to doc: ",this.issues[i].SNo);
+      //console.log("S.No added to doc: ",this.issues[i].SNo);
     }
     this.isLoading=false
     this.dataSource=new MatTableDataSource(this.issues);
@@ -83,12 +67,12 @@ export class AppComponent {
 
   bodyDialog(cell:string){
     const bodyDialogRef=this.dialog.open(bodyDialogView,{width:'fit-content',height:'fit-content',data:cell});
-    console.log("body cell clicked: ",cell);
+    //console.log("body cell clicked: ",cell);
   }
 
   titleDialog(cell:string){
     const titleDialogRef=this.dialog.open(titleDialogView,{width:'fit-content',height:'fit-content',data:cell});
-    console.log("body cell clicked: ",cell);
+    //console.log("title cell clicked: ",cell);
   }
 
   onClickedFilter(){
@@ -101,26 +85,10 @@ export class AppComponent {
   }
 
   applyFilter(event: any) {
-    console.log("Filter was hit with string",event.target.value);
+    //console.log("Filter was hit with string",event.target.value);
     this.dataSource.filter = event.target.value.trim().toLowerCase();
   }
 }
-
-/*@Component({
-  selector:'DialogOverviewDialog',
-  templateUrl:'../assets/issue-row-dialog.html',
-  styleUrls: ['../assets/issue-row-dialog.css'],
-})
-export class DialogOverviewDialog {
-
-  constructor(
-    public dialogRef: MatDialogRef<DialogOverviewDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: issueDetails) {}
-
-  onOkClick(): void {
-    this.dialogRef.close();
-  }  
-}*/
 
 @Component({
   selector:'bodyDialogView',
