@@ -9,6 +9,7 @@
 </head>
 
 <body>
+  <!--app-drop-down></app-drop-down!-->
   <div class="fullpage justify-content-center">
     <div *ngIf="isLoading">
       <mat-progress-bar mode="indeterminate"></mat-progress-bar>
@@ -17,26 +18,26 @@
       <mat-card-title>
         <div class="row">
           <img class="col-sm-1 logo" src="../assets/images/softwareag LOGO.png" alt="Softwareag Logo" />
-          <div class="col-sm-2 title justify-content-start" style="vertical-align: middle">
+          <div class="col-sm-2 title justify-content-start">
             <div class="justify-content-start titleHeading">
               Repository Issues
             </div>
           </div>
-          <div class="col-sm-1 toggles justify-content-center">
-            <div class="d-flex justify-content-center">
-              <div class="btn-group" role="group" aria-label="Toggles">
-                <button mat-raised-button type="button" class="btn" data-toggle="tooltip" title="Search by Repo names"
-                  (click)="onToggleChange('Repo')">
+          <div class="col-sm-1 toggles justify-content-start">
+            <div class="d-flex justify-content-start">
+              <div class="btn-group" role="group" aria-label="Toggles" >
+                <button type="button" class="btn" data-toggle="tooltip" title="Search by Repo names"
+                  (click)="onToggleChange('Repo')" [class.mat-elevation-z2]="toggleVal=='Repo'">
                   Repos
                 </button>
-                <button mat-raised-button type="button" class="btn" data-toggle="tooltip" title="Search by Topic name"
-                  (click)="onToggleChange('Topic')">
+                <button type="button" class="btn" data-toggle="tooltip" title="Search by Topic name"
+                  (click)="onToggleChange('Topic')" [class.mat-elevation-z2]="toggleVal=='Topic'">
                   Topic
                 </button>
               </div>
             </div>
           </div>
-          <div class="col-sm-4 form-container d-flex justify-content-center" *ngIf="toggleVal == 'Repo'">
+          <div class="col-sm-3 form-container d-flex justify-content-center" *ngIf="toggleVal == 'Repo'">
             <form (submit)="getRepos(repos.value)" style="width: 75%">
               <div class="input-group mb-3" style="
                     width: 100%;
@@ -59,7 +60,7 @@
               </div>
             </form>
           </div>
-          <div class="col-sm-4 form-container d-flex justify-content-center" *ngIf="toggleVal == 'Topic'">
+          <div class="col-sm-3 form-container d-flex justify-content-center" *ngIf="toggleVal == 'Topic'">
             <form (submit)="getTopicIssues(Topic.value)" style="width: 75%">
               <div class="input-group mb-3" style="
                     width: 100%;
@@ -82,7 +83,7 @@
               </div>
             </form>
           </div>
-          <div class="col-sm-2 form-container d-flex justify-content-end" *ngIf="submitClicked">
+          <div class="col-sm-2 form-container d-flex justify-content-center" *ngIf="submitClicked">
             <div class="input-group mb-3" style="
                   width: 75%;
                   border-radius: 25px;
@@ -103,6 +104,20 @@
               </div>
             </div>
           </div>
+          <div class="col-sm-1 d-flex justify-content-start" *ngIf="submitClicked">
+              <label class="switch col-sm-1  toggleSwitch">
+                <input type="checkbox" value="pullRequests" (change)="changedRequest()">
+                <span class="slider round"></span>
+              </label>
+              <div class="col-sm-10 toggleSwitchText">
+                <p *ngIf="pullCheck" style="font-size: small;">Show Issues</p>
+                <p *ngIf="!pullCheck" style="font-size: small;">Pull Requests</p>
+              </div>
+          </div>
+          <!--div class="col-sm-1 toggleSwitchText" *ngIf="submitClicked">
+            <p *ngIf="pullCheck" style="font-size: small;">Show Issues</p>
+             <p *ngIf="!pullCheck" style="font-size: small;">Pull Requests</p>
+          </div!-->
         </div>
       </mat-card-title>
     </mat-card>
@@ -151,7 +166,7 @@
           <td mat-cell *matCellDef="let element">{{ element.SNo }}</td>
         </ng-container>
 
-        <ng-container matColumnDef="repository">
+        <ng-container matColumnDef="repository" >
           <th mat-header-cell *matHeaderCellDef mat-sort-header>
             REPOSITORY
           </th>
@@ -161,7 +176,7 @@
         <ng-container matColumnDef="issue_number">
           <th mat-header-cell *matHeaderCellDef>ISSUE NUM</th>
           <td mat-cell *matCellDef="let element">
-            <a href="{{ element.issue_url }}" target="_blank" matTooltip="Visit Issue">{{ element.number }}</a>
+            <a href="{{ element.issue_url }}" target="_blank" data-toggle="tooltip" title="Visit Issue">{{ element.number }}</a>
           </td>
         </ng-container>
 
@@ -184,10 +199,10 @@
           <td mat-cell *matCellDef="let element">{{ element.user.login }}</td>
         </ng-container>
 
-        <ng-container matColumnDef="user_type">
+        <!--ng-container matColumnDef="user_type">
           <th mat-header-cell *matHeaderCellDef>USER TYPE</th>
           <td mat-cell *matCellDef="let element">{{ element.user.type }}</td>
-        </ng-container>
+        </ng-container!-->
 
         <ng-container matColumnDef="lable_name">
           <th mat-header-cell *matHeaderCellDef>LABLE NAME</th>

@@ -1,0 +1,15 @@
+<div>
+    <button (click)="clickedDrop()">Columns</button>
+    <div *ngIf="dropOpen">
+        <ul>
+            <li>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked (change)="updated_date($event)">
+                    <label class="form-check-label" for="flexCheckChecked">
+                        Updated Date
+                    </label>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>

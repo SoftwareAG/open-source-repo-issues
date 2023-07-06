@@ -4,6 +4,7 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog
 import { MatPaginator } from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { DropDownComponent } from 'src/app/drop-down/drop-down.component';
 
 
 @Component({
@@ -18,14 +19,17 @@ export class AppComponent {
   submitClicked: boolean = false;
   clickedFilter:boolean=false;
   issues:any;
+  issueList:any=[];
+  pullList:any=[];
   dataSource:any;
   lable_names: string[] = [];
   isLoading:boolean | undefined;
-  constructor(private http: HttpClient,public dialog: MatDialog){}
-  displayedColumns = ['serial','repository','issue_number', 'title','body','user_name','user_type','lable_name','created_at','updated_at'];
+  pullCheck:boolean=false;
+  constructor(private http: HttpClient,public dialog: MatDialog,private drop: DropDownComponent){}
+  //displayedColumns = ['repository','issue_number', 'title','body','user_name','lable_name','created_at','updated_at'];
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!:MatSort;
-  
+  displayedColumns=this.drop.displayedColumns;
   public onToggleChange(val: string) {
     this.toggleVal = val;
   }
@@ -48,19 +52,31 @@ export class AppComponent {
   }
   displayIssues(data:any){
     console.log("data from API:",data);
+    
     this.issues=data.finalOut;
     let len=this.issues.length;
-    //console.log(len);
+    console.log(len);
+    let pull_count=0;
+    let issue_count=0;
     for(let i=0;i<len;i++){
       if(!(this.issues[i].hasOwnProperty("lables"))){
         this.issues[i]["lables"]=[{"name":" "}];
         //console.log("adding empty lable names:",this.issues[i].lables[0].name);
       }
-      this.issues[i]["SNo"]=i+1;
+      //this.issues[i]["SNo"]=i+1;
       //console.log("S.No added to doc: ",this.issues[i].SNo);
+      if(this.issues[i].user.type=='Bot'){
+        //console.log("Pull_req",this.issues[i]);
+        this.pullList.push(this.issues[i]);
+      }
+      if(!(this.issues[i].user.type=='Bot')){
+        this.issueList.push(this.issues[i]);
+      }
     }
+    console.log("Pull List:",this.pullList);
+    console.log("Issues List:",this.issueList);
     this.isLoading=false
-    this.dataSource=new MatTableDataSource(this.issues);
+    this.dataSource=new MatTableDataSource(this.issueList);
     this.dataSource.paginator=this.paginator;
     this.dataSource.sort=this.sort;
   }
@@ -87,6 +103,21 @@ export class AppComponent {
   applyFilter(event: any) {
     //console.log("Filter was hit with string",event.target.value);
     this.dataSource.filter = event.target.value.trim().toLowerCase();
+  }
+  changedRequest(){
+    if(this.pullCheck==false){
+      this.dataSource=new MatTableDataSource(this.pullList);
+      this.dataSource.paginator=this.paginator;
+      this.dataSource.sort=this.sort;
+      this.pullCheck=true;
+    }
+    else{
+      this.dataSource=new MatTableDataSource(this.issueList);
+      this.dataSource.paginator=this.paginator;
+      this.dataSource.sort=this.sort;
+      this.pullCheck=false;
+    }
+    console.log("pullChecked: ",this.pullCheck);
   }
 }
 

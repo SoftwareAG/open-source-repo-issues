@@ -7,13 +7,15 @@ import { MaterialModule } from './material/material.module';
 import {FormsModule} from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClientModule } from '@angular/common/http';
+import { DropDownComponent } from './drop-down/drop-down.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     bodyDialogView,
-    titleDialogView
+    titleDialogView,
+    DropDownComponent
   ],
   imports: [
     BrowserModule,
@@ -23,7 +25,7 @@ import { HttpClientModule } from '@angular/common/http';
     HttpClientModule,
     BrowserAnimationsModule
   ],
-  providers: [],
+  providers: [DropDownComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
