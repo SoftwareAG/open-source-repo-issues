@@ -2,6 +2,30 @@ mat-card{
     width: 100%;
     height: auto;
 }
+mat-form-field{
+    height:20px;
+}
+.mat-mdc-text-field-wrapper.mdc-text-field--outlined .mat-mdc-form-field-infix {
+    padding-top: 8px !important;
+}
+.mat-mdc-form-field .mat-mdc-floating-label.mdc-floating-label{
+    top:20px !important;
+}
+.mdc-notched-outline{
+    height:75% !important;
+}
+.mdc-text-field--outlined .mdc-notched-outline .mdc-notched-outline__trailing{
+    border-top-right-radius: var(--mdc-shape-small, 25px) !important;
+    border-bottom-right-radius: var(--mdc-shape-small, 25px) !important;
+}
+.mdc-text-field--outlined .mdc-notched-outline .mdc-notched-outline__leading {
+    width: 25px !important;
+    border-top-left-radius: 25px !important;
+    border-bottom-left-radius: 25px !important;
+}
+.btn.disabled, .btn:disabled, fieldset:disabled .btn {
+    border: none;
+}
 .title{
     margin-top: 5px;
     color:#011F3D;
