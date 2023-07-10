@@ -1,5 +1,6 @@
 mat-card{
     width: 100%;
+    height: auto;
 }
 .title{
     margin-top: 5px;
@@ -42,6 +43,11 @@ button{
 .toggleSwitchText{
     margin-left: 2px;
     margin-top: 20px;
+}
+.checkBox{
+    vertical-align: middle;
+    width: 12px;
+    height: 12px;
 }
 .table{
     margin-top: 10px;

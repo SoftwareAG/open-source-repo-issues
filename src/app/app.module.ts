@@ -4,18 +4,17 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppComponent,bodyDialogView,titleDialogView} from './app.component';
 import { MaterialModule } from './material/material.module';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClientModule } from '@angular/common/http';
-import { DropDownComponent } from './drop-down/drop-down.component';
+
 
 
 @NgModule({
   declarations: [
     AppComponent,
     bodyDialogView,
-    titleDialogView,
-    DropDownComponent
+    titleDialogView
   ],
   imports: [
     BrowserModule,
@@ -23,9 +22,10 @@ import { DropDownComponent } from './drop-down/drop-down.component';
     FormsModule,
     NgbModule,
     HttpClientModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    ReactiveFormsModule
   ],
-  providers: [DropDownComponent],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

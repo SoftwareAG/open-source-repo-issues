@@ -9,7 +9,6 @@
 </head>
 
 <body>
-  <!--app-drop-down></app-drop-down!-->
   <div class="fullpage justify-content-center">
     <div *ngIf="isLoading">
       <mat-progress-bar mode="indeterminate"></mat-progress-bar>
@@ -25,12 +24,12 @@
           </div>
           <div class="col-sm-1 toggles justify-content-start">
             <div class="d-flex justify-content-start">
-              <div class="btn-group" role="group" aria-label="Toggles" >
-                <button type="button" class="btn" data-toggle="tooltip" title="Search by Repo names"
+              <div class="btn-group" role="group" aria-label="Toggles">
+                <button type="button" class="btn btn-light" data-toggle="tooltip" title="Search by Repo names"
                   (click)="onToggleChange('Repo')" [class.mat-elevation-z2]="toggleVal=='Repo'">
                   Repos
                 </button>
-                <button type="button" class="btn" data-toggle="tooltip" title="Search by Topic name"
+                <button type="button" class="btn btn-light" data-toggle="tooltip" title="Search by Topic name"
                   (click)="onToggleChange('Topic')" [class.mat-elevation-z2]="toggleVal=='Topic'">
                   Topic
                 </button>
@@ -105,28 +104,38 @@
             </div>
           </div>
           <div class="col-sm-1 d-flex justify-content-start" *ngIf="submitClicked">
-              <label class="switch col-sm-1  toggleSwitch">
-                <input type="checkbox" value="pullRequests" (change)="changedRequest()">
-                <span class="slider round"></span>
-              </label>
-              <div class="col-sm-10 toggleSwitchText">
-                <p *ngIf="pullCheck" style="font-size: small;">Show Issues</p>
-                <p *ngIf="!pullCheck" style="font-size: small;">Pull Requests</p>
-              </div>
+            <label class="switch col-sm-1  toggleSwitch">
+              <input type="checkbox" value="pullRequests" (change)="changedRequest()">
+              <span class="slider round"></span>
+            </label>
+            <div class="col-sm-10 toggleSwitchText">
+              <p *ngIf="pullCheck" style="font-size: small;">Show Issues</p>
+              <p *ngIf="!pullCheck" style="font-size: small;">Pull Requests</p>
+            </div>
           </div>
-          <!--div class="col-sm-1 toggleSwitchText" *ngIf="submitClicked">
-            <p *ngIf="pullCheck" style="font-size: small;">Show Issues</p>
-             <p *ngIf="!pullCheck" style="font-size: small;">Pull Requests</p>
-          </div!-->
+          <div class="col-sm-2 d-flex justify-content-end" *ngIf="submitClicked">
+            <mat-form-field appearance="outline" style="margin-bottom: -1.25em; height: 99%; margin-top: 10px;">
+              <mat-label>Hide Columns</mat-label>
+              <mat-select multiple>
+                <mat-option (click)="repository()">Reposotory</mat-option>
+                <mat-option (click)="title()">Title</mat-option>
+                <mat-option (click)="body()">Body</mat-option>
+                <mat-option (click)="user()">User</mat-option>
+                <mat-option (click)="lable()">Lables</mat-option>
+                <mat-option (click)="created()">Created Date</mat-option>
+                <mat-option (click)="updated_date()">Updated Date</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
         </div>
       </mat-card-title>
     </mat-card>
     <br />
     <div class="d-flex justify-content-center" *ngIf="!submitClicked" style="width: 60%; margin-left: 20%">
       <mat-card>
-          <mat-card-title class="d-flex justify-content-center">
-            <h1>HOW TO USE</h1>
-          </mat-card-title>  
+        <mat-card-title class="d-flex justify-content-center">
+          <h1>HOW TO USE</h1>
+        </mat-card-title>
         <mat-card-content class="d-flex justify-content-center">
           <div>
             <p>
@@ -139,7 +148,7 @@
             <h2>Steps:</h2>
             <ol>
               <li>Select how you want to search (Repository/Topic name)</li>
-              <li>Type the search field as show in the search bar and click 'search icon' or press ENTER</li>
+              <li>Type the search field as shown in the search bar and click 'search icon' or press ENTER</li>
               <li>Please wait patiently</li>
               <li>Once the data is loaded, you can filter data by:</li>
               <ul>
@@ -149,7 +158,13 @@
                 <li>Body</li>
                 <li>Created/Updated Date Time</li>
               </ul>
-              <li>You can SORT the data with respect to Repository name</li>
+              <li>Click on switch to get Pull Requests OR Issues</li>
+              <li>Hide columns you don't wish to see:</li>
+              <ul>
+                <li>click on 'Hide Columns' dropdown</li>
+                <li>select/deselect fields</li>
+              </ul>
+              <li>You can SORT the data with respect to Repository name:</li>
               <ol>
                 <li>Hover over Repository header</li>
                 <li>Click on the Arrow button</li>
@@ -159,14 +174,14 @@
         </mat-card-content>
       </mat-card>
     </div>
-    <div class="table" *ngIf="submitClicked">
-      <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+    <div class="table" id="table" *ngIf="submitClicked">
+      <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z2">
         <ng-container matColumnDef="serial">
           <th mat-header-cell *matHeaderCellDef>S.No</th>
           <td mat-cell *matCellDef="let element">{{ element.SNo }}</td>
         </ng-container>
 
-        <ng-container matColumnDef="repository" >
+        <ng-container matColumnDef="repository">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>
             REPOSITORY
           </th>
@@ -176,7 +191,8 @@
         <ng-container matColumnDef="issue_number">
           <th mat-header-cell *matHeaderCellDef>ISSUE NUM</th>
           <td mat-cell *matCellDef="let element">
-            <a href="{{ element.issue_url }}" target="_blank" data-toggle="tooltip" title="Visit Issue">{{ element.number }}</a>
+            <a href="{{ element.issue_url }}" target="_blank" data-toggle="tooltip" title="Visit Issue">{{
+              element.number }}</a>
           </td>
         </ng-container>
 
@@ -221,8 +237,8 @@
           <th mat-header-cell *matHeaderCellDef>UPDATED AT</th>
           <td mat-cell *matCellDef="let element">{{ element.updated_at }}</td>
         </ng-container>
-        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        <tr mat-header-row *matHeaderRowDef="this.displayedColumns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns:this.displayedColumns"></tr>
       </table>
       <!--div *ngIf="isLoading && submitClicked" class="loading">
         <mat-spinner></mat-spinner>
@@ -230,6 +246,17 @@
       <mat-paginator [pageSizeOptions]="[5, 10, 20, 50, 100]" showFirstLastButtons aria-label="Select page of Issues">
       </mat-paginator>
     </div>
+    <!--div *ngIf="submitClicked">
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+        <ng-container [matColumnDef]="column" *ngFor="let column of drop.displayedColumns">
+          <th mat-header-cell *matHeaderCellDef> {{column}} </th>
+          <td mat-cell *matCellDef="let element"> {{element[column]}} </td>
+        </ng-container>
+      
+        <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+        <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
+      </table>
+    </div!-->
   </div>
 </body>
 

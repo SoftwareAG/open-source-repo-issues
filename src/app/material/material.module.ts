@@ -10,6 +10,7 @@ import {MatSortModule} from '@angular/material/sort';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatIconModule} from '@angular/material/icon';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
+import {MatFormFieldModule} from '@angular/material/form-field';
 
 const MaterialComponents =[
   MatButtonModule,
@@ -22,7 +23,8 @@ const MaterialComponents =[
   MatSortModule,
   MatDialogModule,
   MatIconModule,
-  MatProgressBarModule
+  MatProgressBarModule,
+  MatFormFieldModule
 ];
 
 @NgModule({
