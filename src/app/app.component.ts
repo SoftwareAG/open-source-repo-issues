@@ -37,7 +37,6 @@ export class AppComponent{
     this.submitClicked=true;
     this.isLoading=true;
     let ROOT_URL='https://presalesglobaldev.apigw-aw-eu.webmethods.io/gateway/Github%20Issues/1.0/github/issues';
-    //console.log("searching repos: ",Repos);
     const headers={'Contet-Type':'application/json'}
     this.http.get<JSON>(ROOT_URL,{headers:headers, params:{repos:Repos}}).subscribe((data)=>this.displayIssues(data));
   }
@@ -45,16 +44,13 @@ export class AppComponent{
     this.submitClicked=true;
     this.isLoading=true;
     let ROOT_URL='https://presalesglobaldev.apigw-aw-eu.webmethods.io/gateway/Github%20Issues/1.0/github/topicIssues';
-    //console.log("searching Topic: ",Topic);
     const headers={'Contet-Type':'application/json'}
     this.http.get<JSON>(ROOT_URL,{headers:headers, params:{topic:Topic}}).subscribe((data)=>this.displayIssues(data));
   }
   displayIssues(data:any){
-    console.log("data from API:",data);
     
     this.issues=data.finalOut;
     let len=this.issues.length;
-    //console.log(len);
     for(let i=0;i<len;i++){
       if(!(this.issues[i].hasOwnProperty("lables"))){
         this.issues[i]["lables"]=[{"name":" "}];
@@ -66,8 +62,6 @@ export class AppComponent{
         this.issueList.push(this.issues[i]);
       }
     }
-    //console.log("Pull List:",this.pullList);
-    //console.log("Issues List:",this.issueList);
     this.isLoading=false
     this.dataSource=new MatTableDataSource(this.issueList);
     this.dataSource.paginator=this.paginator;
@@ -76,12 +70,10 @@ export class AppComponent{
 
   bodyDialog(cell:string){
     const bodyDialogRef=this.dialog.open(bodyDialogView,{width:'fit-content',height:'fit-content',data:cell});
-    //console.log("body cell clicked: ",cell);
   }
 
   titleDialog(cell:string){
     const titleDialogRef=this.dialog.open(titleDialogView,{width:'fit-content',height:'fit-content',data:cell});
-    //console.log("title cell clicked: ",cell);
   }
 
   onClickedFilter(){
@@ -94,7 +86,6 @@ export class AppComponent{
   }
 
   applyFilter(event: any) {
-    //console.log("Filter was hit with string",event.target.value);
     this.dataSource.filter = event.target.value.trim().toLowerCase();
   }
   changedRequest(){
@@ -110,7 +101,6 @@ export class AppComponent{
       this.dataSource.sort=this.sort;
       this.pullCheck=false;
     }
-    //console.log("pullChecked: ",this.pullCheck);
   }
   reposColumn:boolean=true;
   titleColumn:boolean=true;
