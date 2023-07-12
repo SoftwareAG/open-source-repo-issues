@@ -5,6 +5,12 @@ import { MatPaginator } from '@angular/material/paginator';
 import {MatSort} from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ViewEncapsulation } from '@angular/core';
+import {FormControl} from '@angular/forms';
+
+export interface column{
+  value:string;
+  viewValue:string;
+}
 
 @Component({
   selector: 'app-root',
@@ -15,6 +21,18 @@ import { ViewEncapsulation } from '@angular/core';
 
 export class AppComponent{
 
+  columns = new FormControl();
+  allCols:column[]=[
+    {value:'repository' , viewValue:'Repository'},
+    {value:'issue_number' , viewValue:'Issue Number'},
+    {value:'title' , viewValue:'Title'},
+    {value:'body' , viewValue:'Body'},
+    {value:'user_name' , viewValue:'User'},
+    {value:'lable_name' , viewValue:'Labels'},
+    {value:'created_at' , viewValue:'Created Date'},
+    {value:'updated_at' , viewValue:'Updated Date'}
+  ]
+  selected=['repository','issue_number', 'title','body','user_name','lable_name','created_at','updated_at'];
   toggleVal:string ='Topic';
   submitClicked: boolean = false;
   clickedFilter:boolean=false;
@@ -25,6 +43,8 @@ export class AppComponent{
   lable_names: string[] = [];
   isLoading:boolean | undefined;
   pullCheck:boolean=false;
+  progressValue:number=5;
+  dataNotFound:boolean=false;
   constructor(private http: HttpClient,public dialog: MatDialog){}
   displayedColumns = ['repository','issue_number', 'title','body','user_name','lable_name','created_at','updated_at'];
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -32,23 +52,42 @@ export class AppComponent{
   public onToggleChange(val: string) {
     this.toggleVal = val;
   }
-
+  selectedColumns(selected:string[]){
+    this.displayedColumns=selected;
+    console.log("selected:",selected);
+  }
   getRepos(Repos: string){
     this.submitClicked=true;
     this.isLoading=true;
+    this.dataNotFound=false;
     let ROOT_URL='https://presalesglobaldev.apigw-aw-eu.webmethods.io/gateway/Github%20Issues/1.0/github/issues';
     const headers={'Contet-Type':'application/json'}
+    this.progressValue=75;
     this.http.get<JSON>(ROOT_URL,{headers:headers, params:{repos:Repos}}).subscribe((data)=>this.displayIssues(data));
   }
   getTopicIssues(Topic:string){
     this.submitClicked=true;
     this.isLoading=true;
+    this.dataNotFound=false;
     let ROOT_URL='https://presalesglobaldev.apigw-aw-eu.webmethods.io/gateway/Github%20Issues/1.0/github/topicIssues';
     const headers={'Contet-Type':'application/json'}
+    this.progressValue=35;
+    setTimeout(() =>{this.progressValue=50},5000);
+    setTimeout(() =>{this.progressValue=75},10000);
+    setTimeout(() =>{this.progressValue=90},15000);
     this.http.get<JSON>(ROOT_URL,{headers:headers, params:{topic:Topic}}).subscribe((data)=>this.displayIssues(data));
   }
+
   displayIssues(data:any){
-    
+    this.pullList=[];
+    this.issueList=[];
+    this.progressValue=90;
+    console.log("data:",data);
+    if(!(data.hasOwnProperty("finalOut"))){
+      this.dataNotFound=true;
+      this.progressValue=100;
+      this.isLoading=false;
+    }
     this.issues=data.finalOut;
     let len=this.issues.length;
     for(let i=0;i<len;i++){
@@ -62,9 +101,10 @@ export class AppComponent{
         this.issueList.push(this.issues[i]);
       }
     }
+    this.progressValue=100;
     this.isLoading=false
     this.dataSource=new MatTableDataSource(this.issueList);
-    this.dataSource.paginator=this.paginator;
+    setTimeout(() =>{this.dataSource.paginator=this.paginator;},0);
     this.dataSource.sort=this.sort;
   }
 
@@ -100,93 +140,6 @@ export class AppComponent{
       this.dataSource.paginator=this.paginator;
       this.dataSource.sort=this.sort;
       this.pullCheck=false;
-    }
-  }
-  reposColumn:boolean=true;
-  titleColumn:boolean=true;
-  bodyColumn:boolean=true;
-  userColumn:boolean=true;
-  lableColumn:boolean=true;
-  createdColumn:boolean=true;
-  updatedDateColumn:boolean=true;
-  displayChanged:boolean=false;
-  
-  repository(){
-    if(this.reposColumn==true){
-      this.displayedColumns.splice((this.displayedColumns.indexOf('repository')),1);
-      this.displayedColumns=[...this.displayedColumns];
-      this.reposColumn=false;
-    }
-    else{
-      this.displayedColumns.push('repository');
-      this.reposColumn=true;
-    }
-  }
-  title(){
-    if(this.titleColumn==true){
-      this.displayedColumns.splice((this.displayedColumns.indexOf('title')),1);
-      this.displayedColumns=[...this.displayedColumns];
-      this.titleColumn=false;
-    }
-    else{
-      this.displayedColumns.push('title');
-      this.titleColumn=true;
-    }
-
-  }
-  body(){
-    if(this.bodyColumn==true){
-      this.displayedColumns.splice((this.displayedColumns.indexOf('body')),1);
-      this.displayedColumns=[...this.displayedColumns];
-      this.bodyColumn=false;
-    }
-    else{
-      this.displayedColumns.push('body');
-      this.bodyColumn=true;
-    }
-  }
-  user(){
-    if(this.userColumn==true){
-      this.displayedColumns.splice((this.displayedColumns.indexOf('user_name')),1);
-      this.displayedColumns=[...this.displayedColumns];
-      this.userColumn=false;
-    }
-    else{
-      this.displayedColumns.push('user_name');
-      this.userColumn=true;
-    }
-  }
-  lable(){
-    if(this.lableColumn==true){
-      this.displayedColumns.splice((this.displayedColumns.indexOf('lable_name')),1);
-      this.displayedColumns=[...this.displayedColumns];
-      this.lableColumn=false;
-    }
-    else{
-      this.displayedColumns.push('lable_name');
-      this.lableColumn=true;
-    }
-  }
-  created(){
-    if(this.createdColumn==true){
-      this.displayedColumns.splice((this.displayedColumns.indexOf('created_at')),1);
-      this.displayedColumns=[...this.displayedColumns];
-      this.createdColumn=false;
-    }
-    else{
-      this.displayedColumns.push('created_at');
-      this.createdColumn=true;
-    }
-  }
-  updated_date(){
-    if(this.updatedDateColumn==true){
-      this.displayedColumns.splice((this.displayedColumns.indexOf('updated_at')),1);
-      this.displayedColumns=[...this.displayedColumns];
-      this.updatedDateColumn=false;
-    }
-    else{
-      this.displayedColumns.push('updated_at');
-      this.updatedDateColumn=true;
     }
   }
 }
