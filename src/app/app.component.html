@@ -38,19 +38,9 @@
           </div>
           <div class="col-sm-3 form-container d-flex justify-content-center" *ngIf="toggleVal == 'Repo'">
             <form (submit)="getRepos(repos.value)" style="width: 75%">
-              <div class="input-group mb-3" style="
-                    width: 100%;
-                    border-radius: 25px;
-                    border: 1px solid black;
-                    height: 40px;
-                  ">
-                <input type="text" #repos required class="form-control" placeholder="repo1,repo2,..." aria-label="repos"
-                  aria-describedby="basic-addon2" style="
-                      border-top-left-radius: 25px;
-                      border-bottom-left-radius: 25px;
-                      height: 100%;
-                      border-right: none;
-                    " />
+              <div class="input-group mb-3 form-div">
+                <input type="text" #repos required class="form-control form-inp" placeholder="repo1,repo2,..." aria-label="repos"
+                  aria-describedby="basic-addon2"/>
                 <div class="input-group-append" style="height: 100%">
                   <button class="btn" type="submit" style="height: 100%">
                     <mat-icon>search</mat-icon>
@@ -61,19 +51,9 @@
           </div>
           <div class="col-sm-3 form-container d-flex justify-content-center" *ngIf="toggleVal == 'Topic'">
             <form (submit)="getTopicIssues(Topic.value)" style="width: 75%">
-              <div class="input-group mb-3" style="
-                    width: 100%;
-                    border-radius: 25px;
-                    border: 1px solid black;
-                    height: 40px;
-                  ">
-                <input type="text" #Topic required class="form-control" placeholder="topic-name" aria-label="topic"
-                  aria-describedby="basic-addon2" style="
-                      border-top-left-radius: 25px;
-                      border-bottom-left-radius: 25px;
-                      height: 100%;
-                      border-right: none;
-                    " />
+              <div class="input-group mb-3 form-div">
+                <input type="text" #Topic required class="form-control form-inp" placeholder="topic-name" aria-label="topic"
+                  aria-describedby="basic-addon2"/>
                 <div class="input-group-append" style="height: 100%">
                   <button class="btn" type="submit" style="height: 100%">
                     <mat-icon>search</mat-icon>
@@ -83,19 +63,9 @@
             </form>
           </div>
           <div class="col-sm-2 form-container d-flex justify-content-center" *ngIf="submitClicked">
-            <div class="input-group mb-3" style="
-                  width: 75%;
-                  border-radius: 25px;
-                  border: 1px solid black;
-                  height: 40px;
-                ">
-              <input type="text" class="form-control" placeholder="filter" aria-label="filter"
-                aria-describedby="basic-addon2" style="
-                    border-top-left-radius: 25px;
-                    border-bottom-left-radius: 25px;
-                    height: 100%;
-                    border-right: none;
-                  " (keyup)="applyFilter($event)" />
+            <div class="input-group mb-3 filter-form-div">
+              <input type="text" class="form-control form-inp" placeholder="filter" aria-label="filter"
+                aria-describedby="basic-addon2" (keyup)="applyFilter($event)" />
               <div class="input-group-append" style="height: 100%">
                 <button class="btn" type="submit" style="height: 100%" disabled>
                   <mat-icon>filter_list</mat-icon>

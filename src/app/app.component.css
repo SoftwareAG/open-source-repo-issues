@@ -23,6 +23,24 @@ mat-icon{
 .form-container{
     margin-top: 15px;
 }
+.form-inp{
+    border-top-left-radius: 25px;
+    border-bottom-left-radius: 25px;
+    height: 100%;
+    border-right: none;
+}
+.form-div{
+    width: 100%;
+    border-radius: 25px;
+    border: 1px solid black;
+    height: 40px;
+}
+.filter-form-div{
+    width: 75%;
+    border-radius: 25px;
+    border: 1px solid black;
+    height: 40px;
+}
 button{
     border: none;
 }
@@ -134,7 +152,7 @@ body{
     -webkit-transition: .4s;
     transition: .4s;
   }
-  .mat-mdc-text-field-wrapper.mdc-text-field--outlined .mat-mdc-form-field-infix {
+.mat-mdc-text-field-wrapper.mdc-text-field--outlined .mat-mdc-form-field-infix {
     padding-top: 8px !important;
 }
 .mat-mdc-form-field .mat-mdc-floating-label.mdc-floating-label{
@@ -154,4 +172,10 @@ body{
 }
 .btn.disabled, .btn:disabled, fieldset:disabled .btn {
     border: none;
+}
+.mat-mdc-select-trigger{
+    padding-bottom:10px;
+}
+.mat-mdc-paginator-range-actions{
+    padding-top: 10px;;
 }
