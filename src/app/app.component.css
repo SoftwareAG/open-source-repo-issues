@@ -1,6 +1,6 @@
 mat-card{
     width: 100%;
-    height: auto;
+    height: fit-content;
 }
 mat-form-field{
     height:20px;
@@ -11,7 +11,7 @@ mat-form-field{
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     font-style:normal;
     font-size: 125%;
-    width: 15%;
+    /*width: 15%;*/
 }
 .titleHeading{
     margin-left: -10px;
@@ -67,7 +67,7 @@ button{
     margin-left: 20px;
     width: 98%;
     height:98%;
-    overflow: auto;
+    /*overflow: auto;*/
 }
 th{
     font-weight: bold;

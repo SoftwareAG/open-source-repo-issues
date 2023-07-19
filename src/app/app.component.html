@@ -16,15 +16,15 @@
     <mat-card>
       <mat-card-title>
         <div class="row">
-          <img class="col-sm-1 logo" src="../assets/images/softwareag LOGO.png" alt="Softwareag Logo" />
-          <div class="col-sm-2 title justify-content-start">
+          <img class="col-lg-1 col-sm-1 logo" src="../assets/images/softwareag LOGO.png" alt="Softwareag Logo" />
+          <div class="col-lg-2 col-sm-4 title justify-content-start">
             <div class="justify-content-start titleHeading">
               Repository Issues
             </div>
           </div>
-          <div class="col-sm-1 toggles justify-content-start">
-            <div class="d-flex justify-content-start">
-              <div class="btn-group" role="group" aria-label="Toggles">
+          <div class="col-lg-1 col-sm-2 toggles justify-content-start">
+            <!--div class=""!-->
+              <div class="btn-group" role="group" aria-label="Toggles" style="width: 100%;">
                 <button type="button" class="btn btn-light" data-toggle="tooltip" title="Search by Repo names"
                   (click)="onToggleChange('Repo')" [class.mat-elevation-z2]="toggleVal=='Repo'">
                   Repos
@@ -34,9 +34,9 @@
                   Topic
                 </button>
               </div>
-            </div>
+            <!--/div!-->
           </div>
-          <div class="col-sm-3 form-container d-flex justify-content-center" *ngIf="toggleVal == 'Repo'">
+          <div class="col-lg-3 col-sm-4 form-container d-flex justify-content-center" *ngIf="toggleVal == 'Repo'">
             <form (submit)="getRepos(repos.value)" style="width: 75%">
               <div class="input-group mb-3 form-div">
                 <input type="text" #repos required class="form-control form-inp" placeholder="repo1,repo2,..." aria-label="repos"
@@ -49,7 +49,7 @@
               </div>
             </form>
           </div>
-          <div class="col-sm-3 form-container d-flex justify-content-center" *ngIf="toggleVal == 'Topic'">
+          <div class="col-lg-3 col-sm-4 col-xs-6 form-container d-flex justify-content-center" *ngIf="toggleVal == 'Topic'">
             <form (submit)="getTopicIssues(Topic.value)" style="width: 75%">
               <div class="input-group mb-3 form-div">
                 <input type="text" #Topic required class="form-control form-inp" placeholder="topic-name" aria-label="topic"
@@ -62,7 +62,7 @@
               </div>
             </form>
           </div>
-          <div class="col-sm-2 form-container d-flex justify-content-center" *ngIf="submitClicked">
+          <div class="col-lg-2 col-sm-4 col-xs-6 form-container d-flex justify-content-center" *ngIf="submitClicked">
             <div class="input-group mb-3 filter-form-div">
               <input type="text" class="form-control form-inp" placeholder="filter" aria-label="filter"
                 aria-describedby="basic-addon2" (keyup)="applyFilter($event)" />
@@ -73,17 +73,17 @@
               </div>
             </div>
           </div>
-          <div class="col-sm-1 d-flex justify-content-start" *ngIf="submitClicked">
-            <label class="switch col-sm-1  toggleSwitch">
+          <div class="col-lg-1 col-sm-4 col-xs-3 d-flex justify-content-center" *ngIf="submitClicked">
+            <label class="switch col-lg-1 col-sm-3  toggleSwitch">
               <input type="checkbox" value="pullRequests" (change)="changedRequest()">
               <span class="slider round"></span>
             </label>
-            <div class="col-sm-10 toggleSwitchText">
+            <div class="col-lg-10 col-sm-7 toggleSwitchText">
               <p *ngIf="pullCheck" style="font-size: small;">Show Issues</p>
               <p *ngIf="!pullCheck" style="font-size: small;">Pull Requests</p>
             </div>
           </div>
-          <div class="col-sm-2 d-flex justify-content-end" *ngIf="submitClicked">
+          <div class="col-lg-2 col-sm-4 col-xs-4 d-flex justify-content-center" *ngIf="submitClicked">
             <mat-form-field appearance="outline" 
               style="margin-bottom: -1.25em;max-height: 10px !important; margin-top: 15px;">
               <mat-label>Configure Columns</mat-label>
