@@ -6,6 +6,7 @@ import {MatSort} from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ViewEncapsulation } from '@angular/core';
 import {FormControl} from '@angular/forms';
+import * as crypto from 'crypto-js';
 
 export interface column{
   value:string;
@@ -47,6 +48,9 @@ export class AppComponent{
   dataNotFound:boolean=false;
   constructor(private http: HttpClient,public dialog: MatDialog){}
   displayedColumns = ['repository','issue_number', 'title','body','user_name','lable_name','created_at','updated_at'];
+  secretKey="Darpan&YashMakeGoodTeam";
+  encryptURL='U2FsdGVkX18mRsLZgE8BGrILC0FieZO+q8TPeLqhmSZ0q6SCM44CIMWpUbWmzUcswBhj6u/yXhg0RtOPBArslr5ffDFUM08H8RAHCWp/ZljDToNFhgUEBJ2/FnEReZ62XjabB1NM+ISne2aXAlpR3g=='
+  headers={'Contet-Type':'application/json'};
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!:MatSort;
   public onToggleChange(val: string) {
@@ -54,35 +58,31 @@ export class AppComponent{
   }
   selectedColumns(selected:string[]){
     this.displayedColumns=selected;
-    console.log("selected:",selected);
   }
   getRepos(Repos: string){
     this.submitClicked=true;
     this.isLoading=true;
     this.dataNotFound=false;
-    let ROOT_URL='https://presalesglobaldev.apigw-aw-eu.webmethods.io/gateway/Github%20Issues/1.0/github/issues';
-    const headers={'Contet-Type':'application/json'}
+    let ROOT_URL=crypto.AES.decrypt(this.encryptURL.toString(),this.secretKey).toString(crypto.enc.Utf8)+'issues';
     this.progressValue=75;
-    this.http.get<JSON>(ROOT_URL,{headers:headers, params:{repos:Repos}}).subscribe((data)=>this.displayIssues(data));
+    this.http.get<JSON>(ROOT_URL,{headers:this.headers, params:{repos:Repos}}).subscribe((data)=>this.displayIssues(data));
   }
   getTopicIssues(Topic:string){
     this.submitClicked=true;
     this.isLoading=true;
     this.dataNotFound=false;
-    let ROOT_URL='https://presalesglobaldev.apigw-aw-eu.webmethods.io/gateway/Github%20Issues/1.0/github/topicIssues';
-    const headers={'Contet-Type':'application/json'}
+    let ROOT_URL=crypto.AES.decrypt(this.encryptURL.toString(),this.secretKey).toString(crypto.enc.Utf8)+'topicIssues';
     this.progressValue=35;
     setTimeout(() =>{this.progressValue=50},5000);
     setTimeout(() =>{this.progressValue=75},10000);
     setTimeout(() =>{this.progressValue=90},15000);
-    this.http.get<JSON>(ROOT_URL,{headers:headers, params:{topic:Topic}}).subscribe((data)=>this.displayIssues(data));
+    this.http.get<JSON>(ROOT_URL,{headers:this.headers, params:{topic:Topic}}).subscribe((data)=>this.displayIssues(data));
   }
 
   displayIssues(data:any){
     this.pullList=[];
     this.issueList=[];
     this.progressValue=90;
-    console.log("data:",data);
     if(!(data.hasOwnProperty("finalOut"))){
       this.dataNotFound=true;
       this.progressValue=100;
