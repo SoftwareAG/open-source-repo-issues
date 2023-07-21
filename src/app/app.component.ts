@@ -48,7 +48,7 @@ export class AppComponent{
   dataNotFound:boolean=false;
   constructor(private http: HttpClient,public dialog: MatDialog){}
   displayedColumns = ['repository','issue_number', 'title','body','user_name','lable_name','created_at','updated_at'];
-  secretKey="1617169566033";
+  accessKey="1617169566033";
   encryptURL='U2FsdGVkX1++MV0TQYwIVCUSyCjtOV5AoCcCZEkreAIKqffcRqVdlkL8988IqpDhbI8mS+SJd7Bf3LRj4bf2rRArNIAnt/2m2letE2q7Wog72lNK9uGYPfJ687GrJjoV7ZuadB85ELcBDK0jZnCVww=='
   headers={'Contet-Type':'application/json'};
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -63,7 +63,7 @@ export class AppComponent{
     this.submitClicked=true;
     this.isLoading=true;
     this.dataNotFound=false;
-    let ROOT_URL=crypto.AES.decrypt(this.encryptURL.toString(),this.secretKey).toString(crypto.enc.Utf8)+'issues';
+    let ROOT_URL=crypto.AES.decrypt(this.encryptURL.toString(),this.accessKey).toString(crypto.enc.Utf8)+'issues';
     this.progressValue=75;
     this.http.get<JSON>(ROOT_URL,{headers:this.headers, params:{repos:Repos}}).subscribe((data)=>this.displayIssues(data));
   }
@@ -71,7 +71,7 @@ export class AppComponent{
     this.submitClicked=true;
     this.isLoading=true;
     this.dataNotFound=false;
-    let ROOT_URL=crypto.AES.decrypt(this.encryptURL.toString(),this.secretKey).toString(crypto.enc.Utf8)+'topicIssues';
+    let ROOT_URL=crypto.AES.decrypt(this.encryptURL.toString(),this.accessKey).toString(crypto.enc.Utf8)+'topicIssues';
     this.progressValue=35;
     setTimeout(() =>{this.progressValue=50},5000);
     setTimeout(() =>{this.progressValue=75},10000);
