@@ -48,8 +48,8 @@ export class AppComponent{
   dataNotFound:boolean=false;
   constructor(private http: HttpClient,public dialog: MatDialog){}
   displayedColumns = ['repository','issue_number', 'title','body','user_name','lable_name','created_at','updated_at'];
-  secretKey="Darpan&YashMakeGoodTeam";
-  encryptURL='U2FsdGVkX18mRsLZgE8BGrILC0FieZO+q8TPeLqhmSZ0q6SCM44CIMWpUbWmzUcswBhj6u/yXhg0RtOPBArslr5ffDFUM08H8RAHCWp/ZljDToNFhgUEBJ2/FnEReZ62XjabB1NM+ISne2aXAlpR3g=='
+  secretKey="1617169566033";
+  encryptURL='U2FsdGVkX1++MV0TQYwIVCUSyCjtOV5AoCcCZEkreAIKqffcRqVdlkL8988IqpDhbI8mS+SJd7Bf3LRj4bf2rRArNIAnt/2m2letE2q7Wog72lNK9uGYPfJ687GrJjoV7ZuadB85ELcBDK0jZnCVww=='
   headers={'Contet-Type':'application/json'};
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!:MatSort;
