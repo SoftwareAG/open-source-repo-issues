@@ -65,7 +65,7 @@ button{
     margin-left: 20px;
     width: 98%;
     height:98%;
-    overflow-x: scroll;
+    /*overflow-x: scroll;*/
 }
 th{
     font-weight: bold;

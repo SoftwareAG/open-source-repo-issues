@@ -23,7 +23,6 @@
             </div>
           </div>
           <div class="col-lg-1 col-sm-2 toggles justify-content-start">
-            <!--div class=""!-->
               <div class="btn-group" role="group" aria-label="Toggles" style="width: 100%;">
                 <button type="button" class="btn btn-light" data-toggle="tooltip" title="Search by Repo names"
                   (click)="onToggleChange('Repo')" [class.mat-elevation-z2]="toggleVal=='Repo'">
@@ -34,7 +33,6 @@
                   Topic
                 </button>
               </div>
-            <!--/div!-->
           </div>
           <div class="col-lg-3 col-sm-4 form-container d-flex justify-content-center" *ngIf="toggleVal == 'Repo'">
             <form (submit)="getRepos(repos.value)" style="width: 75%">
@@ -108,14 +106,13 @@
               repositories.
             </p>
             <p>
-              You can start searching with a topic name or repository name(s)
+              You can start searching with a topic name or repository name(s).
             </p>
             <h2>Steps:</h2>
             <ol>
-              <li>Select how you want to search (Repository/Topic name)</li>
-              <li>Type the search field as shown in the search bar and click 'search icon' or press ENTER</li>
-              <li>Please wait patiently</li>
-              <li>Once the data is loaded, you can filter data by:</li>
+              <li>Select how you want to search (Repository/Topic name).</li>
+              <li>Type the search field as shown in the search bar and click 'search icon' or press ENTER.</li>
+              <li>Filter data by:</li>
               <ul>
                 <li>Repository name</li>
                 <li>Issue Number</li>
@@ -123,19 +120,16 @@
                 <li>Body</li>
                 <li>Created/Updated Date Time</li>
               </ul>
-              <li>Click on switch to get Pull Requests OR Issues</li>
-              <li>Hide columns you don't wish to see:</li>
-              <ul>
-                <li>click on 'Hide Columns' dropdown</li>
-                <li>select/deselect fields</li>
-              </ul>
-              <li>You can SORT the data with respect to Repository name:</li>
-              <ol>
-                <li>Hover over Repository header</li>
-                <li>Click on the Arrow button</li>
-              </ol>
+              <li>Click on switch to get Pull Requests OR Issues.</li>
             </ol>
+            <hr>
+            <div class="d-flex justify-content-center">
+              <p>These tools are provided as-is and without warranty or support.</p>
+            </div>
+            
+            <hr>
           </div>
+          
         </mat-card-content>
       </mat-card>
     </div>
@@ -154,7 +148,7 @@
         </ng-container>
 
         <ng-container matColumnDef="issue_number">
-          <th mat-header-cell *matHeaderCellDef>ISSUE NUM</th>
+          <th mat-header-cell *matHeaderCellDef>ISSUE #</th>
           <td mat-cell *matCellDef="let element">
             <a href="{{ element.issue_url }}" target="_blank" data-toggle="tooltip" title="Visit Issue">{{
               element.number }}</a>
@@ -169,7 +163,7 @@
         </ng-container>
 
         <ng-container matColumnDef="body">
-          <th mat-header-cell *matHeaderCellDef>BODY</th>
+          <th mat-header-cell *matHeaderCellDef>DESCRIPTION</th>
           <td mat-cell (click)="bodyDialog(element.body)" *matCellDef="let element">
             <div class="ellipsed">{{ element.body }}</div>
           </td>
@@ -204,7 +198,10 @@
       </mat-paginator>
     </div>
     <div *ngIf="isLoading" class="d-flex justify-content-center">
-      <h3>Loading... {{progressValue}}%</h3>
+      <div>
+        <mat-progress-spinner mode="indeterminate" [diameter]="50"></mat-progress-spinner>
+        <p style="margin-left: 10px;">{{progressValue}}%</p>
+      </div>
     </div>
     <div *ngIf="dataNotFound" class=" d-flex justify-content-center">
       <div>
