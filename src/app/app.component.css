@@ -45,7 +45,6 @@ button{
 }
 .fullpage{
     width: 100%;
-    height: fit-content;
     display: contents;
     align-content: center;
     align-items: center;
