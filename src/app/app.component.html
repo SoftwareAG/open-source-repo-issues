@@ -194,9 +194,11 @@
         <tr mat-header-row *matHeaderRowDef="this.displayedColumns; sticky: true"></tr>
         <tr mat-row *matRowDef="let row; columns:this.displayedColumns"></tr>
       </table>
-      <mat-paginator [pageSizeOptions]="[10, 20, 50, 100]" showFirstLastButtons aria-label="Select page of Issues">
-      </mat-paginator>
     </div>
+    <mat-paginator [pageSizeOptions]="[10, 20, 50, 100]"
+      showFirstLastButtons aria-label="Select page of Issues" 
+      *ngIf="submitClicked && !dataNotFound && !isLoading">
+    </mat-paginator>
     <div *ngIf="isLoading" class="d-flex justify-content-center">
       <div>
         <mat-progress-spinner mode="indeterminate" [diameter]="50"></mat-progress-spinner>

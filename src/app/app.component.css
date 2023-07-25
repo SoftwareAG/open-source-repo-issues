@@ -63,8 +63,7 @@ button{
     margin-top: 10px;
     margin-left: 20px;
     width: 98%;
-    height:98%;
-    /*overflow-x: scroll;*/
+    overflow-x: auto;
 }
 th{
     font-weight: bold;
