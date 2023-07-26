@@ -6,7 +6,6 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 </p>
 <br/>
 
-### Screen Shot
 ![issuesDashboardScreenShot](images/issuesDashboardScreenShot.PNG)
 
 ###
