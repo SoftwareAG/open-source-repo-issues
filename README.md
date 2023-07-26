@@ -6,7 +6,7 @@ This application is built to ease tracking of Software AG github repositories is
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.0.3.
 </p>
 <br/>
-![issuesDashboardScreenShot](https://github.com/SoftwareAG/open-source-repo-issues/assets/32765455/7d253420-938e-4b0d-9f5b-4c6ce101535a)
+
 <hr>
 <p>These tools are provided as-is and without warranty or support. They do not constitute part of the Software AG product suite. Users are free to use, fork and modify them, subject to the license agreement. While Software AG welcomes contributions, we cannot guarantee to include every contribution in the master project.
 </p>
