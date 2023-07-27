@@ -35,7 +35,7 @@
               </div>
 
           </div>
-          <div class="col-lg-3 col-sm-4 form-container d-flex justify-content-center" *ngIf="toggleVal == 'Repo'">
+          <div class="col-lg-3 col-sm-4 form-container d-flex justify-content-end" *ngIf="toggleVal == 'Repo'">
             <form (submit)="getRepos(repos.value)" style="width: 75%">
               <div class="input-group mb-3 form-div">
                 <input type="text" #repos required class="form-control form-inp" placeholder="repo1,repo2,..." aria-label="repos"
@@ -48,7 +48,7 @@
               </div>
             </form>
           </div>
-          <div class="col-lg-3 col-sm-4 col-xs-6 form-container d-flex justify-content-center" *ngIf="toggleVal == 'Topic'">
+          <div class="col-lg-3 col-sm-4 col-xs-6 form-container d-flex justify-content-end" *ngIf="toggleVal == 'Topic'">
             <form (submit)="getTopicIssues(Topic.value)" style="width: 75%">
               <div class="input-group mb-3 form-div">
                 <input type="text" #Topic required class="form-control form-inp" placeholder="topic-name" aria-label="topic"
