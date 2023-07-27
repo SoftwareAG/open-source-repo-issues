@@ -26,15 +26,16 @@
               <div class="btn-group" role="group" aria-label="Toggles" style="width: 100%;">
                 <button type="button" class="btn btn-light" data-toggle="tooltip" title="Search by Repo names"
                   (click)="onToggleChange('Repo')" [class.mat-elevation-z2]="toggleVal=='Repo'">
-                  Repos
+                  Repositories
                 </button>
                 <button type="button" class="btn btn-light" data-toggle="tooltip" title="Search by Topic name"
                   (click)="onToggleChange('Topic')" [class.mat-elevation-z2]="toggleVal=='Topic'">
                   Topic
                 </button>
               </div>
+
           </div>
-          <div class="col-lg-3 col-sm-4 form-container d-flex justify-content-center" *ngIf="toggleVal == 'Repo'">
+          <div class="col-lg-3 col-sm-4 form-container d-flex justify-content-end" *ngIf="toggleVal == 'Repo'">
             <form (submit)="getRepos(repos.value)" style="width: 75%">
               <div class="input-group mb-3 form-div">
                 <input type="text" #repos required class="form-control form-inp" placeholder="repo1,repo2,..." aria-label="repos"
@@ -47,7 +48,7 @@
               </div>
             </form>
           </div>
-          <div class="col-lg-3 col-sm-4 col-xs-6 form-container d-flex justify-content-center" *ngIf="toggleVal == 'Topic'">
+          <div class="col-lg-3 col-sm-4 col-xs-6 form-container d-flex justify-content-end" *ngIf="toggleVal == 'Topic'">
             <form (submit)="getTopicIssues(Topic.value)" style="width: 75%">
               <div class="input-group mb-3 form-div">
                 <input type="text" #Topic required class="form-control form-inp" placeholder="topic-name" aria-label="topic"
@@ -175,7 +176,7 @@
         </ng-container>
 
         <ng-container matColumnDef="lable_name">
-          <th mat-header-cell *matHeaderCellDef>LABLE NAME</th>
+          <th mat-header-cell *matHeaderCellDef>LABEL NAME</th>
           <td mat-cell *matCellDef="let element">
             <span *ngFor="let lable of element.lables">{{ lable.name }}
             </span>
