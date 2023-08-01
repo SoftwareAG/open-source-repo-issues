@@ -17,16 +17,14 @@
       <mat-card-title>
         <div class="row">
           <img class="col-lg-1 col-sm-1 logo" src="../assets/images/softwareag LOGO.png" alt="Softwareag Logo" />
-          <div class="col-lg-2 col-sm-4 title justify-content-start">
-            <div class="justify-content-start titleHeading">
-              Repository Issues
-            </div>
+          <div class="col-lg-1 col-sm-3 title justify-content-start">
+            <div class="justify-content-start titleHeading">RepoViz</div>
           </div>
-          <div class="col-lg-1 col-sm-2 toggles justify-content-start">
+          <div class="col-lg-2 col-sm-3 toggles justify-content-start">
               <div class="btn-group" role="group" aria-label="Toggles" style="width: 100%;">
                 <button type="button" class="btn btn-light" data-toggle="tooltip" title="Search by Repo names"
                   (click)="onToggleChange('Repo')" [class.mat-elevation-z2]="toggleVal=='Repo'">
-                  Repos
+                  Repositories
                 </button>
                 <button type="button" class="btn btn-light" data-toggle="tooltip" title="Search by Topic name"
                   (click)="onToggleChange('Topic')" [class.mat-elevation-z2]="toggleVal=='Topic'">
@@ -34,7 +32,7 @@
                 </button>
               </div>
           </div>
-          <div class="col-lg-3 col-sm-4 form-container d-flex justify-content-center" *ngIf="toggleVal == 'Repo'">
+          <div class="col-lg-3 col-sm-4 form-container d-flex justify-content-end" *ngIf="toggleVal == 'Repo'">
             <form (submit)="getRepos(repos.value)" style="width: 75%">
               <div class="input-group mb-3 form-div">
                 <input type="text" #repos required class="form-control form-inp" placeholder="repo1,repo2,..." aria-label="repos"
@@ -47,7 +45,7 @@
               </div>
             </form>
           </div>
-          <div class="col-lg-3 col-sm-4 col-xs-6 form-container d-flex justify-content-center" *ngIf="toggleVal == 'Topic'">
+          <div class="col-lg-3 col-sm-4 col-xs-6 form-container d-flex justify-content-end" *ngIf="toggleVal == 'Topic'">
             <form (submit)="getTopicIssues(Topic.value)" style="width: 75%">
               <div class="input-group mb-3 form-div">
                 <input type="text" #Topic required class="form-control form-inp" placeholder="topic-name" aria-label="topic"
@@ -194,11 +192,12 @@
         <tr mat-header-row *matHeaderRowDef="this.displayedColumns; sticky: true"></tr>
         <tr mat-row *matRowDef="let row; columns:this.displayedColumns"></tr>
       </table>
-    </div>
     <mat-paginator [pageSizeOptions]="[10, 20, 50, 100]"
       showFirstLastButtons aria-label="Select page of Issues" 
       *ngIf="submitClicked && !dataNotFound && !isLoading">
     </mat-paginator>
+    </div>
+    
     <div *ngIf="isLoading" class="d-flex justify-content-center">
       <div>
         <mat-progress-spinner mode="indeterminate" [diameter]="50"></mat-progress-spinner>
@@ -210,6 +209,10 @@
         <h1 class="text-danger">NO DATA FOUND!</h1>
       </div>
     </div>
+  </div>
+  <div class="d-flex justify-content-center footer-div" style="background-color:#0b385b">
+    <p style="padding: 0.5%; font-size: small; color: white;">Developed By </p>
+    <img class="col-lg-1 col-sm-2 footer-img" src="assets/images/global-presales-logo.png" alt="global presales logo"/>
   </div>
 </body>
 </html>

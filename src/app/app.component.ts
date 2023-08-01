@@ -16,7 +16,7 @@
 * limitations under the License.
  */
 
-import {Component, ViewChild, Inject} from '@angular/core';
+import {Component, ViewChild, Inject, isDevMode} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
@@ -67,7 +67,8 @@ export class AppComponent{
   constructor(private http: HttpClient,public dialog: MatDialog){}
   displayedColumns = ['repository','issue_number', 'title','body','user_name','lable_name','created_at','updated_at'];
   accessKey="1617169566033";
-  encryptURL='U2FsdGVkX1++MV0TQYwIVCUSyCjtOV5AoCcCZEkreAIKqffcRqVdlkL8988IqpDhbI8mS+SJd7Bf3LRj4bf2rRArNIAnt/2m2letE2q7Wog72lNK9uGYPfJ687GrJjoV7ZuadB85ELcBDK0jZnCVww=='
+  prodEncryptURL="U2FsdGVkX1+VbkhbUk7Fy8RpMsXifJ7L9WAe6A8+LL61lCdV2wfUhjnDbS6FLd6iqTZ7Ad37SudeWoQr2RdvqrMZpRmva8MvDXjN3NrI5fA7akZC0ulpYI1jQFowiaC+08PbD74JfBfRjQWuBHJGvA==";
+  devEncryptURL="U2FsdGVkX1/xlJ2CJEZF8ziZEx18dp826fQSL3HFMVgbaZlw6wN9xsPWA7RY3Z2PYEyObKmvlpJqRAnNTue/QLSP90oSgXs6jE+QntjWtMuWi28HyjY4Xo+2/FEu5gf50M+S+BfRnJr10k62RV8GRg==";
   headers={'Contet-Type':'application/json'};
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!:MatSort;
@@ -81,7 +82,11 @@ export class AppComponent{
     this.submitClicked=true;
     this.isLoading=true;
     this.dataNotFound=false;
-    let ROOT_URL=crypto.AES.decrypt(this.encryptURL.toString(),this.accessKey).toString(crypto.enc.Utf8)+'issues';
+    let ROOT_URL="";
+    if(isDevMode())
+      ROOT_URL=crypto.AES.decrypt(this.devEncryptURL.toString(),this.accessKey).toString(crypto.enc.Utf8)+'repository';
+    else
+      ROOT_URL=crypto.AES.decrypt(this.prodEncryptURL.toString(),this.accessKey).toString(crypto.enc.Utf8)+'repository';
     this.progressValue=75;
     this.http.get<JSON>(ROOT_URL,{headers:this.headers, params:{repos:Repos}}).subscribe((data)=>this.displayIssues(data));
   }
@@ -89,7 +94,11 @@ export class AppComponent{
     this.submitClicked=true;
     this.isLoading=true;
     this.dataNotFound=false;
-    let ROOT_URL=crypto.AES.decrypt(this.encryptURL.toString(),this.accessKey).toString(crypto.enc.Utf8)+'topicIssues';
+    let ROOT_URL="";
+    if(isDevMode())
+      ROOT_URL=crypto.AES.decrypt(this.devEncryptURL.toString(),this.accessKey).toString(crypto.enc.Utf8)+'TopicName';
+    else
+      ROOT_URL=crypto.AES.decrypt(this.prodEncryptURL.toString(),this.accessKey).toString(crypto.enc.Utf8)+'topicName';
     this.progressValue=35;
     setTimeout(() =>{this.progressValue=50},5000);
     setTimeout(() =>{this.progressValue=75},10000);
