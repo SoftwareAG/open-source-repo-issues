@@ -58,6 +58,7 @@ export class AppComponent{
   issues:any;
   issueList:any=[];
   pullList:any=[];
+  closedPullList:any=[];
   closedList:any=[];
   allIssueList:any=[];
   selectedView:string="Open";
@@ -91,6 +92,7 @@ export class AppComponent{
     this.isLoading=true;
     this.dataNotFound=false;
     this.isErrorOccured=false;
+    this.selectedView="Open";
     if(Topic=='' || Topic==null){
       this.progressValue=75;
     }
@@ -110,6 +112,7 @@ export class AppComponent{
 
   displayIssues(data:any){
     this.pullList=[];
+    this.closedPullList=[];
     this.issueList=[];
     this.closedList=[];
     this.allIssueList=[];
@@ -120,16 +123,20 @@ export class AppComponent{
       if(!(this.issues[i].hasOwnProperty("lables"))){
         this.issues[i]["lables"]=[{"name":" "}];
       }
-      if(this.issues[i].user_type=='Bot'){
+      if(this.issues[i].hasOwnProperty("pull_request") && this.issues[i].status=='open'){
         this.pullList.push(this.issues[i]);
       }
-      else if(this.issues[i].status=='open'){
+      else if(this.issues[i].hasOwnProperty("pull_request") && this.issues[i].status=='closed'){
+        this.closedPullList.push(this.issues[i]);
+      }
+      else if(this.issues[i].status=='open' && !(this.issues[i].hasOwnProperty("pull_request"))){
         this.issueList.push(this.issues[i]);
       }
-      else if(this.issues[i].status=='closed'){
+      else if(this.issues[i].status=='closed' && !(this.issues[i].hasOwnProperty("pull_request"))){
         this.closedList.push(this.issues[i]);
       }
     }
+    console.log(this.pullList);
     this.progressValue=100;
     this.isLoading=false;
     this.dataSource=new MatTableDataSource(this.issueList);
@@ -153,28 +160,33 @@ export class AppComponent{
       setTimeout(() =>{this.dataSource.paginator=this.paginator;},0);
       this.dataSource.sort=this.sort;
     }
-    if(this.selectedView=='Closed'){
+    else if(this.selectedView=='Closed'){
       this.dataSource=new MatTableDataSource(this.closedList);
       setTimeout(() =>{this.dataSource.paginator=this.paginator;},0);
       this.dataSource.sort=this.sort;
     }
-    if(this.selectedView=='All'){
+    else if(this.selectedView=='All'){
       this.dataSource=new MatTableDataSource(this.issues);
     setTimeout(() =>{this.dataSource.paginator=this.paginator;},0);
     this.dataSource.sort=this.sort;
     }
-    if(this.selectedView=='Pull'){
+    else if(this.selectedView=='Pull'){
       this.dataSource=new MatTableDataSource(this.pullList);
     setTimeout(() =>{this.dataSource.paginator=this.paginator;},0);
     this.dataSource.sort=this.sort;
     }
+    else if(this.selectedView=='ClosedPull'){
+      this.dataSource=new MatTableDataSource(this.closedPullList);
+    setTimeout(() =>{this.dataSource.paginator=this.paginator;},0);
+    this.dataSource.sort=this.sort;
+    }
   }
-  bodyDialog(cell:string){
-    const bodyDialogRef=this.dialog.open(bodyDialogView,{width:'fit-content',height:'fit-content',data:cell});
+  bodyDialog(cell:any){
+    const bodyDialogRef=this.dialog.open(bodyDialogView,{width:'70%',height:'80%',data:cell});
   }
 
-  titleDialog(cell:string){
-    const titleDialogRef=this.dialog.open(titleDialogView,{width:'fit-content',height:'fit-content',data:cell});
+  titleDialog(cell:any){
+    const titleDialogRef=this.dialog.open(titleDialogView,{width:'40%',height:'40%',data:cell});
   }
 
 
@@ -193,7 +205,7 @@ export class AppComponent{
 export class bodyDialogView{
   constructor(
     public bodyDialogRef: MatDialogRef<bodyDialogView>,
-    @Inject(MAT_DIALOG_DATA) public data: string) {}
+    @Inject(MAT_DIALOG_DATA) public data: any) {}
 
   onOkClick(): void{
     this.bodyDialogRef.close();
@@ -208,7 +220,7 @@ export class bodyDialogView{
 export class titleDialogView{
   constructor(
     public titleDialogRef: MatDialogRef<titleDialogView>,
-    @Inject(MAT_DIALOG_DATA) public data: string) {}
+    @Inject(MAT_DIALOG_DATA) public data: any) {}
 
   onOkClick(): void{
     this.titleDialogRef.close();

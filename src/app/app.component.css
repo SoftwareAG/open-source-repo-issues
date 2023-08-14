@@ -82,8 +82,8 @@ th{
 .ellipsed:hover{
     cursor: pointer;
     overflow: hidden;
-    box-shadow: 0 0 3px black;
-    margin-top: -10px;
+    /* box-shadow: 0 0 3px black; */
+    /* margin-top: -10px; */
 }
 body{
     width: 99.6%;

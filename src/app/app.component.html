@@ -97,6 +97,7 @@
                 <mat-option value="Open" (click)="changedView()">Open Issues</mat-option>
                 <mat-option value="Pull" (click)="changedView()">Pull Requests</mat-option>
                 <mat-option value="Closed" (click)="changedView()">Closed Issues</mat-option>
+                <mat-option value="ClosedPull" (click)="changedView()">Closed Pull Requests</mat-option>
               </mat-select>
             </mat-form-field>
           </div>
@@ -177,15 +178,17 @@
 
         <ng-container matColumnDef="title" class="col-sm-2">
           <th mat-header-cell *matHeaderCellDef>TITLE</th>
-          <td mat-cell (click)="titleDialog(element.title)" *matCellDef="let element">
-            <div class="ellipsed">{{ element.title }}</div>
+          <!-- <td mat-cell (click)="titleDialog(element.title)" *matCellDef="let element"> -->
+          <td mat-cell  *matCellDef="let element">
+            <div (click)="titleDialog(element)" class="ellipsed" *ngIf="element.title!='' && element.title!=null" title="View Title">{{ element.title }}</div>
           </td>
         </ng-container>
 
         <ng-container matColumnDef="body">
           <th mat-header-cell *matHeaderCellDef>DESCRIPTION</th>
-          <td mat-cell (click)="bodyDialog(element.body)" *matCellDef="let element">
-            <div class="ellipsed">{{ element.body }}</div>
+          <!-- <td mat-cell (click)="bodyDialog(element.body)" *matCellDef="let element"> -->
+          <td mat-cell  *matCellDef="let element">
+            <div (click)="bodyDialog(element)" class="ellipsed" *ngIf="element.body!='' && element.body!=null" title="View Description">{{ element.body }}</div>
           </td>
         </ng-container>
 
