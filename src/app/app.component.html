@@ -9,14 +9,6 @@
 </head>
 
 <body>
-  <!--mat-form-field appearance="outline">
-    <mat-select [(value)]="selectedView">
-      <mat-option value="Open" (click)="changedView('Open')">Open</mat-option>
-      <mat-option value="Closed" (click)="changedView('Closed')">Closed</mat-option>
-      <mat-option value="All" (click)="changedView('All')">All</mat-option>
-      <mat-option value="Pull" (click)="changedView('Pull')">Pull</mat-option>
-    </mat-select>
-  </mat-form-field-->
   <div class="fullpage justify-content-center">
     <div *ngIf="isLoading">
       <mat-progress-bar mode="determinate" value="{{progressValue}}"></mat-progress-bar>
@@ -39,10 +31,8 @@
                   Topic
                 </button>
               </div>
-
           </div>
           <div class="col-lg-2 col-sm-4 form-container d-flex justify-content-end" *ngIf="toggleVal == 'Repo'">
-            <!--form (submit)="getRepos(repos.value)" style="width: 75%"-->
             <form (submit)="callAPI(repos.value,'')" style="width: 100%;">
               <div class="input-group mb-3 form-div">
                 <input type="text" #repos required class="form-control form-inp" placeholder="repo1,repo2,..." aria-label="repos"
@@ -56,7 +46,6 @@
             </form>
           </div>
           <div class="col-lg-2 col-sm-4 col-xs-6 form-container d-flex justify-content-end" *ngIf="toggleVal == 'Topic'">
-            <!--form (submit)="getTopicIssues(Topic.value)" style="width: 75%"-->
             <form (submit)="callAPI('',Topic.value)" style="width: 100%;">
               <div class="input-group mb-3 form-div">
                 <input type="text" #Topic required class="form-control form-inp" placeholder="topic-name" aria-label="topic"
@@ -80,16 +69,7 @@
               </div>
             </div>
           </div>
-          <!--div class="col-lg-1 col-sm-4 col-xs-3 d-flex justify-content-center" *ngIf="submitClicked">
-            <label class="switch col-lg-1 col-sm-3  toggleSwitch">
-              <input type="checkbox" value="pullRequests" (change)="changedRequest()">
-              <span class="slider round"></span>
-            </label>
-            <div class="col-lg-10 col-sm-7 toggleSwitchText">
-              <p *ngIf="pullCheck" style="font-size: small;">Show Issues</p>
-              <p *ngIf="!pullCheck" style="font-size: small;">Pull Requests</p>
-            </div>
-          </div-->
+
           <div class="col-lg-2 col-sm-4 col-xs-3 d-flex justify-content-center" *ngIf="submitClicked">
             <mat-form-field appearance="outline" style=" margin-top: 15px; width: 75%;">
               <mat-select [(value)]="selectedView">
@@ -146,11 +126,9 @@
             <hr>
             <div class="d-flex justify-content-center">
               <p>These tools are provided as-is and without warranty or support.</p>
-            </div>
-            
+            </div>            
             <hr>
-          </div>
-          
+          </div>          
         </mat-card-content>
       </mat-card>
     </div>
@@ -178,15 +156,13 @@
 
         <ng-container matColumnDef="title" class="col-sm-2">
           <th mat-header-cell *matHeaderCellDef>TITLE</th>
-          <!-- <td mat-cell (click)="titleDialog(element.title)" *matCellDef="let element"> -->
           <td mat-cell  *matCellDef="let element">
-            <div (click)="titleDialog(element)" class="ellipsed" *ngIf="element.title!='' && element.title!=null" title="View Title">{{ element.title }}</div>
+            <div class="titleEllipsed" *ngIf="element.title!='' && element.title!=null" title="{{element.title}}">{{ element.title }}</div>
           </td>
         </ng-container>
 
         <ng-container matColumnDef="body">
           <th mat-header-cell *matHeaderCellDef>DESCRIPTION</th>
-          <!-- <td mat-cell (click)="bodyDialog(element.body)" *matCellDef="let element"> -->
           <td mat-cell  *matCellDef="let element">
             <div (click)="bodyDialog(element)" class="ellipsed" *ngIf="element.body!='' && element.body!=null" title="View Description">{{ element.body }}</div>
           </td>
