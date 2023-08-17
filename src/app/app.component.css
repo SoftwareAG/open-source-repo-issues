@@ -103,6 +103,24 @@ body{
     height: 65px;
     padding: 10px;
 }
+.GPlogo{
+    background-color: #ccc;
+    padding: 10px;
+}
+.footer-div{
+    position: fixed;
+    bottom: 0px;
+    right: 0px;
+    left: 0px;
+    height:40px;
+}
+.footer-img{
+    padding: 5px;
+    width: 100px;
+}
+mat-paginator{
+    padding-bottom: 50px;
+}
 .switch {
     position: relative;
     display: inline-block;
