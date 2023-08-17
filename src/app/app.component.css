@@ -79,11 +79,19 @@ th{
     text-overflow: ellipsis;
     transition: 0.5s;
 }
+.titleEllipsed{
+    width: 250px;
+    height: 40px;
+    padding: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: 0.5s;
+}
 .ellipsed:hover{
     cursor: pointer;
     overflow: hidden;
-    box-shadow: 0 0 3px black;
-    margin-top: -10px;
+    /* box-shadow: 0 0 3px black; */
+    /* margin-top: -10px; */
 }
 body{
     width: 99.6%;
@@ -94,24 +102,6 @@ body{
     width: 65px;
     height: 65px;
     padding: 10px;
-}
-.GPlogo{
-    background-color: #ccc;
-    padding: 10px;
-}
-.footer-div{
-    position: fixed;
-    bottom: 0px;
-    right: 0px;
-    left: 0px;
-    height:5vh;
-}
-.footer-img{
-    padding: 5px;
-    width: 100px;
-}
-mat-paginator{
-    padding-bottom: 50px;
 }
 .switch {
     position: relative;

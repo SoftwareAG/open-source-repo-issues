@@ -31,10 +31,9 @@
                   Topic
                 </button>
               </div>
-
           </div>
-          <div class="col-lg-3 col-sm-4 form-container d-flex justify-content-end" *ngIf="toggleVal == 'Repo'">
-            <form (submit)="getRepos(repos.value)" style="width: 75%">
+          <div class="col-lg-2 col-sm-4 form-container d-flex justify-content-end" *ngIf="toggleVal == 'Repo'">
+            <form (submit)="callAPI(repos.value,'')" style="width: 100%;">
               <div class="input-group mb-3 form-div">
                 <input type="text" #repos required class="form-control form-inp" placeholder="repo1,repo2,..." aria-label="repos"
                   aria-describedby="basic-addon2"/>
@@ -46,8 +45,8 @@
               </div>
             </form>
           </div>
-          <div class="col-lg-3 col-sm-4 col-xs-6 form-container d-flex justify-content-end" *ngIf="toggleVal == 'Topic'">
-            <form (submit)="getTopicIssues(Topic.value)" style="width: 75%">
+          <div class="col-lg-2 col-sm-4 col-xs-6 form-container d-flex justify-content-end" *ngIf="toggleVal == 'Topic'">
+            <form (submit)="callAPI('',Topic.value)" style="width: 100%;">
               <div class="input-group mb-3 form-div">
                 <input type="text" #Topic required class="form-control form-inp" placeholder="topic-name" aria-label="topic"
                   aria-describedby="basic-addon2"/>
@@ -70,15 +69,17 @@
               </div>
             </div>
           </div>
-          <div class="col-lg-1 col-sm-4 col-xs-3 d-flex justify-content-center" *ngIf="submitClicked">
-            <label class="switch col-lg-1 col-sm-3  toggleSwitch">
-              <input type="checkbox" value="pullRequests" (change)="changedRequest()">
-              <span class="slider round"></span>
-            </label>
-            <div class="col-lg-10 col-sm-7 toggleSwitchText">
-              <p *ngIf="pullCheck" style="font-size: small;">Show Issues</p>
-              <p *ngIf="!pullCheck" style="font-size: small;">Pull Requests</p>
-            </div>
+
+          <div class="col-lg-2 col-sm-4 col-xs-3 d-flex justify-content-center" *ngIf="submitClicked">
+            <mat-form-field appearance="outline" style=" margin-top: 15px; width: 75%;">
+              <mat-select [(value)]="selectedView">
+                <mat-option value="All" (click)="changedView()">All</mat-option>
+                <mat-option value="Open" (click)="changedView()">Open Issues</mat-option>
+                <mat-option value="Pull" (click)="changedView()">Open Pull Requests</mat-option>
+                <mat-option value="Closed" (click)="changedView()">Closed Issues</mat-option>
+                <mat-option value="ClosedPull" (click)="changedView()">Closed Pull Requests</mat-option>
+              </mat-select>
+            </mat-form-field>
           </div>
           <div class="col-lg-2 col-sm-4 col-xs-4 d-flex justify-content-center" *ngIf="submitClicked">
             <mat-form-field appearance="outline" 
@@ -117,6 +118,7 @@
                 <li>Issue Number</li>
                 <li>Title</li>
                 <li>Body</li>
+                <li>User Name</li>
                 <li>Created/Updated Date Time</li>
               </ul>
               <li>Click on switch to get Pull Requests OR Issues.</li>
@@ -124,15 +126,13 @@
             <hr>
             <div class="d-flex justify-content-center">
               <p>These tools are provided as-is and without warranty or support.</p>
-            </div>
-            
+            </div>            
             <hr>
-          </div>
-          
+          </div>          
         </mat-card-content>
       </mat-card>
     </div>
-    <div class="table" id="table" *ngIf="submitClicked && !dataNotFound && !isLoading">
+    <div class="table" id="table" *ngIf="submitClicked && !dataNotFound && !isLoading && !isErrorOccured">
       <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z2">
         <ng-container matColumnDef="serial">
           <th mat-header-cell *matHeaderCellDef>S.No</th>
@@ -156,21 +156,21 @@
 
         <ng-container matColumnDef="title" class="col-sm-2">
           <th mat-header-cell *matHeaderCellDef>TITLE</th>
-          <td mat-cell (click)="titleDialog(element.title)" *matCellDef="let element">
-            <div class="ellipsed">{{ element.title }}</div>
+          <td mat-cell  *matCellDef="let element">
+            <div class="titleEllipsed" *ngIf="element.title!='' && element.title!=null" title="{{element.title}}">{{ element.title }}</div>
           </td>
         </ng-container>
 
         <ng-container matColumnDef="body">
           <th mat-header-cell *matHeaderCellDef>DESCRIPTION</th>
-          <td mat-cell (click)="bodyDialog(element.body)" *matCellDef="let element">
-            <div class="ellipsed">{{ element.body }}</div>
+          <td mat-cell  *matCellDef="let element">
+            <div (click)="bodyDialog(element)" class="ellipsed" *ngIf="element.body!='' && element.body!=null" title="View Description">{{ element.body }}</div>
           </td>
         </ng-container>
 
         <ng-container matColumnDef="user_name">
           <th mat-header-cell *matHeaderCellDef>USER NAME</th>
-          <td mat-cell *matCellDef="let element">{{ element.user.login }}</td>
+          <td mat-cell *matCellDef="let element">{{ element.user_name }}</td>
         </ng-container>
 
         <ng-container matColumnDef="lable_name">
@@ -195,7 +195,7 @@
       </table>
     <mat-paginator [pageSizeOptions]="[10, 20, 50, 100]"
       showFirstLastButtons aria-label="Select page of Issues" 
-      *ngIf="submitClicked && !dataNotFound && !isLoading">
+      *ngIf="submitClicked && !dataNotFound && !isLoading && !isErrorOccured">
     </mat-paginator>
     </div>
     
@@ -210,6 +210,15 @@
         <h1 class="text-danger">NO DATA FOUND!</h1>
       </div>
     </div>
+    <div *ngIf="isErrorOccured" class=" d-flex justify-content-center">
+      <div>
+        <h1 class="text-danger">Error Occured, Contact Developer</h1>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex justify-content-center footer-div" style="background-color:#0b385b">
+    <p style="padding-top: 10px; font-size: small; color: white;">Developed By </p>
+    <img class="col-lg-1 col-sm-2 footer-img" src="assets/images/global-presales-logo.png" alt="global presales logo"/>
   </div>
   <div class="d-flex justify-content-center footer-div" style="background-color:#0b385b">
     <p style="padding-top: 10px; font-size: small; color: white;">Developed By </p>
