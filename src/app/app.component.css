@@ -79,11 +79,19 @@ th{
     text-overflow: ellipsis;
     transition: 0.5s;
 }
+.titleEllipsed{
+    width: 250px;
+    height: 40px;
+    padding: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: 0.5s;
+}
 .ellipsed:hover{
     cursor: pointer;
     overflow: hidden;
-    box-shadow: 0 0 3px black;
-    margin-top: -10px;
+    /* box-shadow: 0 0 3px black; */
+    /* margin-top: -10px; */
 }
 body{
     width: 99.6%;
@@ -104,7 +112,7 @@ body{
     bottom: 0px;
     right: 0px;
     left: 0px;
-    height:5vh;
+    height:40px;
 }
 .footer-img{
     padding: 5px;
