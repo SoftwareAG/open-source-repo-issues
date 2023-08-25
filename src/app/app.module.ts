@@ -24,7 +24,8 @@ import { MaterialModule } from './material/material.module';
 import {FormsModule,ReactiveFormsModule} from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClientModule } from '@angular/common/http';
-
+import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
+import { JsonPipe } from '@angular/common';
 
 
 @NgModule({
@@ -39,7 +40,9 @@ import { HttpClientModule } from '@angular/common/http';
     ReactiveFormsModule,
     NgbModule,
     HttpClientModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    NgbTypeaheadModule,
+    JsonPipe
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -21,22 +21,23 @@
             <div class="justify-content-start titleHeading">RepoViz</div>
           </div>
           <div class="col-lg-2 col-sm-3 toggles justify-content-start">
-              <div class="btn-group" role="group" aria-label="Toggles" style="width: 100%;">
-                <button type="button" class="btn btn-light" data-toggle="tooltip" title="Search by Repo names"
-                  (click)="onToggleChange('Repo')" [class.mat-elevation-z2]="toggleVal=='Repo'">
-                  Repositories
-                </button>
-                <button type="button" class="btn btn-light" data-toggle="tooltip" title="Search by Topic name"
-                  (click)="onToggleChange('Topic')" [class.mat-elevation-z2]="toggleVal=='Topic'">
-                  Topic
-                </button>
-              </div>
+            <div class="btn-group" role="group" aria-label="Toggles" style="width: 100%;">
+              <button type="button" class="btn btn-light" data-toggle="tooltip" title="Search by Repo names"
+                (click)="onToggleChange('Repo')" [class.mat-elevation-z2]="toggleVal=='Repo'">
+                Repositories
+              </button>
+              <button type="button" class="btn btn-light" data-toggle="tooltip" title="Search by Topic name"
+                (click)="onToggleChange('Topic')" [class.mat-elevation-z2]="toggleVal=='Topic'">
+                Topic
+              </button>
+            </div>
           </div>
           <div class="col-lg-2 col-sm-4 form-container d-flex justify-content-end" *ngIf="toggleVal == 'Repo'">
             <form (submit)="callAPI(repos.value,'')" style="width: 100%;">
               <div class="input-group mb-3 form-div">
-                <input type="text" #repos required class="form-control form-inp" placeholder="repo1,repo2,..." aria-label="repos"
-                  aria-describedby="basic-addon2"/>
+                <input type="text" #repos required class="form-control form-inp"
+        placeholder="repo1,repo2,..." aria-label="repos" aria-describedby="basic-addon2"
+        (keyup)="getOption(repos.value)" [ngbTypeahead]="repoOptions" />
                 <div class="input-group-append" style="height: 100%">
                   <button class="btn" type="submit" style="height: 100%">
                     <mat-icon>search</mat-icon>
@@ -45,11 +46,18 @@
               </div>
             </form>
           </div>
-          <div class="col-lg-2 col-sm-4 col-xs-6 form-container d-flex justify-content-end" *ngIf="toggleVal == 'Topic'">
+          <div class="col-lg-2 col-sm-4 col-xs-6 form-container d-flex justify-content-end"
+            *ngIf="toggleVal == 'Topic'">
             <form (submit)="callAPI('',Topic.value)" style="width: 100%;">
               <div class="input-group mb-3 form-div">
-                <input type="text" #Topic required class="form-control form-inp" placeholder="topic-name" aria-label="topic"
-                  aria-describedby="basic-addon2"/>
+                <!-- <input type="text" #Topic required class="form-control form-inp" placeholder="topic-name"
+                  aria-label="topic" aria-describedby="basic-addon2" /> -->
+                <input type="text" #Topic required class="form-control form-inp"
+                  placeholder="topic-name" aria-label="topic" aria-describedby="basic-addon2"
+                  (keyup)="getOption(Topic.value)" autocomplete="off" [ngbTypeahead]="topicOptions"/>
+                <!-- <datalist id="datalistOptions">
+                  <option *ngFor="let option of topics" [value]="option">
+                </datalist> -->
                 <div class="input-group-append" style="height: 100%">
                   <button class="btn" type="submit" style="height: 100%">
                     <mat-icon>search</mat-icon>
@@ -82,11 +90,12 @@
             </mat-form-field>
           </div>
           <div class="col-lg-2 col-sm-4 col-xs-4 d-flex justify-content-center" *ngIf="submitClicked">
-            <mat-form-field appearance="outline" 
+            <mat-form-field appearance="outline"
               style="margin-bottom: -1.25em;max-height: 10px !important; margin-top: 15px;">
               <mat-label>Configure Columns</mat-label>
               <mat-select [formControl]="columns" multiple [(ngModel)]="selected" multiple>
-                <mat-option *ngFor="let col of allCols" [value]="col.value" (click)="selectedColumns(selected)">{{col.viewValue}}</mat-option>
+                <mat-option *ngFor="let col of allCols" [value]="col.value"
+                  (click)="selectedColumns(selected)">{{col.viewValue}}</mat-option>
               </mat-select>
             </mat-form-field>
           </div>
@@ -126,9 +135,9 @@
             <hr>
             <div class="d-flex justify-content-center">
               <p>These tools are provided as-is and without warranty or support.</p>
-            </div>            
+            </div>
             <hr>
-          </div>          
+          </div>
         </mat-card-content>
       </mat-card>
     </div>
@@ -156,15 +165,17 @@
 
         <ng-container matColumnDef="title" class="col-sm-2">
           <th mat-header-cell *matHeaderCellDef>TITLE</th>
-          <td mat-cell  *matCellDef="let element">
-            <div class="titleEllipsed" *ngIf="element.title!='' && element.title!=null" title="{{element.title}}">{{ element.title }}</div>
+          <td mat-cell *matCellDef="let element">
+            <div class="titleEllipsed" *ngIf="element.title!='' && element.title!=null" title="{{element.title}}">{{
+              element.title }}</div>
           </td>
         </ng-container>
 
         <ng-container matColumnDef="body">
           <th mat-header-cell *matHeaderCellDef>DESCRIPTION</th>
-          <td mat-cell  *matCellDef="let element">
-            <div (click)="bodyDialog(element)" class="ellipsed" *ngIf="element.body!='' && element.body!=null" title="View Description">{{ element.body }}</div>
+          <td mat-cell *matCellDef="let element">
+            <div (click)="bodyDialog(element)" class="ellipsed" *ngIf="element.body!='' && element.body!=null"
+              title="View Description">{{ element.body }}</div>
           </td>
         </ng-container>
 
@@ -193,12 +204,11 @@
         <tr mat-header-row *matHeaderRowDef="this.displayedColumns; sticky: true"></tr>
         <tr mat-row *matRowDef="let row; columns:this.displayedColumns"></tr>
       </table>
-    <mat-paginator [pageSizeOptions]="[10, 20, 50, 100]"
-      showFirstLastButtons aria-label="Select page of Issues" 
-      *ngIf="submitClicked && !dataNotFound && !isLoading && !isErrorOccured">
-    </mat-paginator>
+      <mat-paginator [pageSizeOptions]="[10, 20, 50, 100]" showFirstLastButtons aria-label="Select page of Issues"
+        *ngIf="submitClicked && !dataNotFound && !isLoading && !isErrorOccured">
+      </mat-paginator>
     </div>
-    
+
     <div *ngIf="isLoading" class="d-flex justify-content-center">
       <div>
         <mat-progress-spinner mode="indeterminate" [diameter]="50"></mat-progress-spinner>
@@ -217,13 +227,13 @@
     </div>
   </div>
   <div class="d-flex justify-content-start footer-div" style="background-color:#0b385b;">
-    <div class="col-sm-4" style="padding-top: 10px;padding-left: 10px; font-size: small; color: white;">Version: 1.1.0
+    <div class="col-sm-4" style="padding-top: 10px;padding-left: 10px; font-size: small; color: white;">Version: 1.2.0
     </div>
-    <div class="col-sm-4 d-flex justify-content-center align-content-center" >
+    <div class="col-sm-4 d-flex justify-content-center align-content-center">
       <p style="padding-top:10px;font-size: small; color: white;">Developed By</p>
-      <img class="footer-img" src="assets/images/global-presales-logo.png"
-        alt="global presales logo" />
+      <img class="footer-img" src="assets/images/global-presales-logo.png" alt="global presales logo" />
     </div>
   </div>
 </body>
+
 </html>

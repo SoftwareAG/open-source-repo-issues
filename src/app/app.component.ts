@@ -24,13 +24,22 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ViewEncapsulation } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { Observable, OperatorFunction } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import * as crypto from 'crypto-js';
+
 
 export interface column {
   value: string;
   viewValue: string;
 }
 
+export interface repoOptions{
+  total_count:number;
+  incomplete_results:boolean;
+  items:any[];
+}
+const states=['kerala','telangana','tamil nadu'];
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -39,7 +48,23 @@ export interface column {
 })
 
 export class AppComponent {
-
+  model: any;
+  repoOptions: OperatorFunction<string, readonly string[]> = (text$: Observable<string>) =>
+		text$.pipe(
+			debounceTime(1000),
+			distinctUntilChanged(),
+			map((term) =>
+				term.length < 4 ? [] : this.repositories.filter((v) => v.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10),
+			),
+		);
+    topicOptions: OperatorFunction<string, readonly string[]> = (text$: Observable<string>) =>
+		text$.pipe(
+			debounceTime(1000),
+			distinctUntilChanged(),
+			map((term) =>
+				term.length < 4 ? [] : this.topics.filter((v) => v.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10),
+			),
+		);
   columns = new FormControl();
   allCols: column[] = [
     { value: 'repository', viewValue: 'Repository' },
@@ -72,6 +97,8 @@ export class AppComponent {
   isInputNull:boolean=false;
   errorMessage: string | undefined;
   constructor(private http: HttpClient, public dialog: MatDialog) { }
+  repositories:string[]=[];
+  topics:string[]=[];
   displayedColumns = ['repository', 'issue_number', 'title', 'body', 'user_name', 'lable_name', 'created_at', 'updated_at'];
   accessKey = "1617169566033";
   devMainURL = "U2FsdGVkX1/SY9wnkxUkrlQvGD7b9mxOqY9OatFNQLKMn/02eNQ2OrQu4yHgpqQMEeaPqHlRXjtc8iaaNSbN8MJA6BFhNqLuhde2Jg/gh6lv1495pohf9vEWb0Vkc2yt2hh2pMJIAYX4a+vm0Zl8vg=="
@@ -86,6 +113,79 @@ export class AppComponent {
     this.displayedColumns = selected;
   }
 
+  getOption(search:string){
+    if(search.length>4){
+      if(this.toggleVal=='Topic'){
+        let url='https://presalesglobaldev.apigw-aw-eu.webmethods.io/gateway/ReposInOrgOptions/1.0/topics?q='+search;
+        this.http.get<JSON>(url, { headers: this.headers, params: {per_page:10/*,q:'org:softwareag+'+repo+'in:name'*/ } }).subscribe((data) => this.gettingOptions(data), (error) => this.errorOccured(error));
+      }
+      else{
+        let url='https://presalesglobaldev.apigw-aw-eu.webmethods.io/gateway/ReposInOrgOptions/1.0/repositories?q=org:softwareag+'+search+'+in:name';
+        this.http.get<JSON>(url, { headers: this.headers, params: { sort:'name', order:'asc',per_page:10/*,q:'org:softwareag+'+repo+'in:name'*/ } }).subscribe((data) => this.gettingOptions(data), (error) => this.errorOccured(error));
+      }
+    }   
+  }
+
+  gettingOptions(data:any){
+    console.log(data);
+    if(this.toggleVal=='Topic'){
+      this.topics=[];
+    // let repositoryOptions:string[]=[];
+    if(data.items){
+      for(let i=0;i<data.items.length;i++){
+        this.topics.push(data.items[i].name);
+      }
+    }
+    console.log("topicsOptions:",this.topics);
+    }
+    else{
+      this.repositories=[];
+    // let repositoryOptions:string[]=[];
+    if(data.items){
+      for(let i=0;i<data.items.length;i++){
+        this.repositories.push(data.items[i].name);
+      }
+    }
+    console.log("repoOptions:",this.repositories);
+    }
+  }
+
+  // reposOptions(repo:string){
+  //   console.log(repo);
+  //   if(repo.length>2){
+  //     let url='https://presalesglobaldev.apigw-aw-eu.webmethods.io/gateway/ReposInOrgOptions/1.0/repositories?q=org:softwareag+'+repo+'+in:name';
+  //     this.http.get<JSON>(url, { headers: this.headers, params: { sort:'name', order:'asc',per_page:10/*,q:'org:softwareag+'+repo+'in:name'*/ } }).subscribe((data) => this.options(data), (error) => this.errorOccured(error));
+  //   }    
+  // }
+  // topicOptions(topic:string){
+  //   console.log(topic);
+  //   if(topic.length>2){
+  //     let url='https://presalesglobaldev.apigw-aw-eu.webmethods.io/gateway/ReposInOrgOptions/1.0/topics?q='+topic;
+  //     this.http.get<JSON>(url, { headers: this.headers, params: {per_page:10/*,q:'org:softwareag+'+repo+'in:name'*/ } }).subscribe((data) => this.topicsOptions(data), (error) => this.errorOccured(error));
+  //   } 
+  // }
+  // topicsOptions(data:any){
+  //   console.log(data);
+  //   this.topics=[];
+  //   // let repositoryOptions:string[]=[];
+  //   if(data.items){
+  //     for(let i=0;i<data.items.length;i++){
+  //       this.topics.push(data.items[i].name);
+  //     }
+  //   }
+  //   console.log("topicsOptions:",this.topics);
+  // }
+  // options(data:any){
+  //   console.log(data);
+  //   this.repositories=[];
+  //   // let repositoryOptions:string[]=[];
+  //   if(data.items){
+  //     for(let i=0;i<data.items.length;i++){
+  //       this.repositories.push(data.items[i].name);
+  //     }
+  //   }
+  //   console.log("repoOptions:",this.repositories);
+  // }
   callAPI(Repos: string, Topic: string) {
     if (!(Repos == '' && Topic == '')) {
       let prodURL = crypto.AES.decrypt(this.prodMainURL.toString(), this.accessKey).toString(crypto.enc.Utf8);
