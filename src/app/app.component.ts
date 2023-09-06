@@ -34,12 +34,6 @@ export interface column {
   viewValue: string;
 }
 
-export interface repoOptions{
-  total_count:number;
-  incomplete_results:boolean;
-  items:any[];
-}
-const states=['kerala','telangana','tamil nadu'];
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -103,7 +97,7 @@ export class AppComponent {
   accessKey = "1617169566033";
   devMainURL = "U2FsdGVkX1/SY9wnkxUkrlQvGD7b9mxOqY9OatFNQLKMn/02eNQ2OrQu4yHgpqQMEeaPqHlRXjtc8iaaNSbN8MJA6BFhNqLuhde2Jg/gh6lv1495pohf9vEWb0Vkc2yt2hh2pMJIAYX4a+vm0Zl8vg=="
   prodMainURL = "U2FsdGVkX18utO43TS/VRwUZaz/p9Wl4OWmBP28z6p4O2SdCtZEH/+Zb7EGy05/zQmgmQu2MWkzxi/+dU0KYlaZrGlMh0ci6riHQhb5Wuk6Y+EEDLd1Fn6Ok3f4WfIB4"
-  headers = { 'Contet-Type': 'application/json' };
+  headers = { 'Content-Type': 'application/json' };
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   public onToggleChange(val: string) {
@@ -115,13 +109,15 @@ export class AppComponent {
 
   getOption(search:string){
     if(search.length>4){
+      let gitURL="U2FsdGVkX1+MD/brytDZVcNVN0x8oxlEutTKcIhdthunrrY/aeuEsXXFyIhvjeyHV+jiPXJ+Y7onMboCH8NRQoVXJPCBL+b28prJ9DZQUzjyZ1JvIPMq4UG3a+2GDehtN9F4oJEsBzcN4cNJKGIIzg==";
+      let gitBaseURL = crypto.AES.decrypt(gitURL.toString(), this.accessKey).toString(crypto.enc.Utf8);
       if(this.toggleVal=='Topic'){
-        let url='https://presalesglobaldev.apigw-aw-eu.webmethods.io/gateway/ReposInOrgOptions/1.0/topics?q='+search;
-        this.http.get<JSON>(url, { headers: this.headers, params: {per_page:10/*,q:'org:softwareag+'+repo+'in:name'*/ } }).subscribe((data) => this.gettingOptions(data), (error) => this.errorOccured(error));
+        let url=gitBaseURL+"topics?q="+search;
+        this.http.get<JSON>(url, { headers: this.headers, params: {per_page:10 } }).subscribe((data) => this.gettingOptions(data));
       }
       else{
-        let url='https://presalesglobaldev.apigw-aw-eu.webmethods.io/gateway/ReposInOrgOptions/1.0/repositories?q=org:softwareag+'+search+'+in:name';
-        this.http.get<JSON>(url, { headers: this.headers, params: { sort:'name', order:'asc',per_page:10/*,q:'org:softwareag+'+repo+'in:name'*/ } }).subscribe((data) => this.gettingOptions(data), (error) => this.errorOccured(error));
+        let url=gitBaseURL+"repositories?q=org:softwareag+"+search+"+in:name";
+        this.http.get<JSON>(url, { headers: this.headers, params: { sort:'name', order:'asc',per_page:10} }).subscribe((data) => this.gettingOptions(data));
       }
     }   
   }
@@ -130,7 +126,6 @@ export class AppComponent {
     console.log(data);
     if(this.toggleVal=='Topic'){
       this.topics=[];
-    // let repositoryOptions:string[]=[];
     if(data.items){
       for(let i=0;i<data.items.length;i++){
         this.topics.push(data.items[i].name);
@@ -140,7 +135,6 @@ export class AppComponent {
     }
     else{
       this.repositories=[];
-    // let repositoryOptions:string[]=[];
     if(data.items){
       for(let i=0;i<data.items.length;i++){
         this.repositories.push(data.items[i].name);
@@ -150,42 +144,6 @@ export class AppComponent {
     }
   }
 
-  // reposOptions(repo:string){
-  //   console.log(repo);
-  //   if(repo.length>2){
-  //     let url='https://presalesglobaldev.apigw-aw-eu.webmethods.io/gateway/ReposInOrgOptions/1.0/repositories?q=org:softwareag+'+repo+'+in:name';
-  //     this.http.get<JSON>(url, { headers: this.headers, params: { sort:'name', order:'asc',per_page:10/*,q:'org:softwareag+'+repo+'in:name'*/ } }).subscribe((data) => this.options(data), (error) => this.errorOccured(error));
-  //   }    
-  // }
-  // topicOptions(topic:string){
-  //   console.log(topic);
-  //   if(topic.length>2){
-  //     let url='https://presalesglobaldev.apigw-aw-eu.webmethods.io/gateway/ReposInOrgOptions/1.0/topics?q='+topic;
-  //     this.http.get<JSON>(url, { headers: this.headers, params: {per_page:10/*,q:'org:softwareag+'+repo+'in:name'*/ } }).subscribe((data) => this.topicsOptions(data), (error) => this.errorOccured(error));
-  //   } 
-  // }
-  // topicsOptions(data:any){
-  //   console.log(data);
-  //   this.topics=[];
-  //   // let repositoryOptions:string[]=[];
-  //   if(data.items){
-  //     for(let i=0;i<data.items.length;i++){
-  //       this.topics.push(data.items[i].name);
-  //     }
-  //   }
-  //   console.log("topicsOptions:",this.topics);
-  // }
-  // options(data:any){
-  //   console.log(data);
-  //   this.repositories=[];
-  //   // let repositoryOptions:string[]=[];
-  //   if(data.items){
-  //     for(let i=0;i<data.items.length;i++){
-  //       this.repositories.push(data.items[i].name);
-  //     }
-  //   }
-  //   console.log("repoOptions:",this.repositories);
-  // }
   callAPI(Repos: string, Topic: string) {
     if (!(Repos == '' && Topic == '')) {
       let prodURL = crypto.AES.decrypt(this.prodMainURL.toString(), this.accessKey).toString(crypto.enc.Utf8);
@@ -287,10 +245,6 @@ export class AppComponent {
   bodyDialog(cell: any) {
     const bodyDialogRef = this.dialog.open(bodyDialogView, { width: '700px', height: '300px', data: cell });
   }
-
-
-
-
 
   applyFilter(event: any) {
     this.dataSource.filter = event.target.value.trim().toLowerCase();
