@@ -131,7 +131,6 @@ export class AppComponent {
         this.topics.push(data.items[i].name);
       }
     }
-    console.log("topicsOptions:",this.topics);
     }
     else{
       this.repositories=[];
@@ -140,7 +139,6 @@ export class AppComponent {
         this.repositories.push(data.items[i].name);
       }
     }
-    console.log("repoOptions:",this.repositories);
     }
   }
 
@@ -197,7 +195,6 @@ export class AppComponent {
         this.closedList.push(this.issues[i]);
       }
     }
-    console.log(this.pullList);
     this.progressValue = 100;
     this.isLoading = false;
     this.dataSource = new MatTableDataSource(this.issueList);
