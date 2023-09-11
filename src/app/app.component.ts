@@ -84,6 +84,7 @@ export class AppComponent {
   dataSource: any;
   lable_names: string[] = [];
   isLoading: boolean | undefined;
+  isOptionsLoading:boolean=false;
   pullCheck: boolean = false;
   progressValue: number = 5;
   dataNotFound: boolean = false;
@@ -109,6 +110,7 @@ export class AppComponent {
 
   getOption(search:string){
     if(search.length>4){
+      this.isOptionsLoading=true;
       let gitURL="U2FsdGVkX1+MD/brytDZVcNVN0x8oxlEutTKcIhdthunrrY/aeuEsXXFyIhvjeyHV+jiPXJ+Y7onMboCH8NRQoVXJPCBL+b28prJ9DZQUzjyZ1JvIPMq4UG3a+2GDehtN9F4oJEsBzcN4cNJKGIIzg==";
       let gitBaseURL = crypto.AES.decrypt(gitURL.toString(), this.accessKey).toString(crypto.enc.Utf8);
       if(this.toggleVal=='Topic'){
@@ -123,7 +125,6 @@ export class AppComponent {
   }
 
   gettingOptions(data:any){
-    console.log(data);
     if(this.toggleVal=='Topic'){
       this.topics=[];
     if(data.items){
@@ -140,8 +141,8 @@ export class AppComponent {
       }
     }
     }
+    this.isOptionsLoading=false;
   }
-
   callAPI(Repos: string, Topic: string) {
     if (!(Repos == '' && Topic == '')) {
       let prodURL = crypto.AES.decrypt(this.prodMainURL.toString(), this.accessKey).toString(crypto.enc.Utf8);

@@ -37,11 +37,12 @@
               <div class="input-group mb-3 form-div">
                 <input type="text" #repos required class="form-control form-inp"
         placeholder="repo1,repo2,..." aria-label="repos" aria-describedby="basic-addon2"
-        (keyup)="getOption(repos.value)" [ngbTypeahead]="repoOptions" />
+        (keyup)="getOption(repos.value)" [ngbTypeahead]="repoOptions" (selectItem)="callAPI($event.item,'')" />
                 <div class="input-group-append" style="height: 100%">
-                  <button class="btn" type="submit" style="height: 100%">
+                  <button *ngIf="!isOptionsLoading" class="btn" type="submit" style="height: 100%">
                     <mat-icon>search</mat-icon>
                   </button>
+                  <mat-progress-spinner mode="indeterminate" [diameter]="20" *ngIf="isOptionsLoading" style="margin-top: 10px;margin-right: 10px;"></mat-progress-spinner>
                 </div>
               </div>
             </form>
@@ -50,18 +51,14 @@
             *ngIf="toggleVal == 'Topic'">
             <form (submit)="callAPI('',Topic.value)" style="width: 100%;">
               <div class="input-group mb-3 form-div">
-                <!-- <input type="text" #Topic required class="form-control form-inp" placeholder="topic-name"
-                  aria-label="topic" aria-describedby="basic-addon2" /> -->
                 <input type="text" #Topic required class="form-control form-inp"
                   placeholder="topic-name" aria-label="topic" aria-describedby="basic-addon2"
-                  (keyup)="getOption(Topic.value)" autocomplete="off" [ngbTypeahead]="topicOptions"/>
-                <!-- <datalist id="datalistOptions">
-                  <option *ngFor="let option of topics" [value]="option">
-                </datalist> -->
+                  (keyup)="getOption(Topic.value)" autocomplete="off" [ngbTypeahead]="topicOptions" (selectItem)="callAPI('',$event.item)"/>
                 <div class="input-group-append" style="height: 100%">
-                  <button class="btn" type="submit" style="height: 100%">
+                  <button *ngIf="!isOptionsLoading" class="btn" type="submit" style="height: 100%">
                     <mat-icon>search</mat-icon>
                   </button>
+                  <mat-progress-spinner mode="indeterminate" [diameter]="20" *ngIf="isOptionsLoading" style="margin-top: 10px;margin-right: 10px;"></mat-progress-spinner>
                 </div>
               </div>
             </form>
