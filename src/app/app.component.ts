@@ -115,15 +115,17 @@ export class AppComponent {
       let gitBaseURL = crypto.AES.decrypt(gitURL.toString(), this.accessKey).toString(crypto.enc.Utf8);
       if(this.toggleVal=='Topic'){
         let url=gitBaseURL+"topics?q="+search;
-        this.http.get<JSON>(url, { headers: this.headers, params: {per_page:10 } }).subscribe((data) => this.gettingOptions(data));
+        this.http.get<JSON>(url, { headers: this.headers, params: {per_page:10 } }).subscribe((data) => this.gettingOptions(data), (error) => this.gettingOptionsError());
       }
       else{
         let url=gitBaseURL+"repositories?q=org:softwareag+"+search+"+in:name";
-        this.http.get<JSON>(url, { headers: this.headers, params: { sort:'name', order:'asc',per_page:10} }).subscribe((data) => this.gettingOptions(data));
+        this.http.get<JSON>(url, { headers: this.headers, params: { sort:'name', order:'asc',per_page:10} }).subscribe((data) => this.gettingOptions(data),(error) => this.gettingOptionsError());
       }
     }   
   }
-
+  gettingOptionsError(){
+    this.isOptionsLoading=false;
+  }
   gettingOptions(data:any){
     if(this.toggleVal=='Topic'){
       this.topics=[];
