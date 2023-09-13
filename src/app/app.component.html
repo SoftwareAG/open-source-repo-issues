@@ -35,12 +35,14 @@
           <div class="col-lg-2 col-sm-4 form-container d-flex justify-content-end" *ngIf="toggleVal == 'Repo'">
             <form (submit)="callAPI(repos.value,'')" style="width: 100%;">
               <div class="input-group mb-3 form-div">
-                <input type="text" #repos required class="form-control form-inp" placeholder="repo1,repo2,..."
-                  aria-label="repos" aria-describedby="basic-addon2" />
+                <input type="text" #repos required class="form-control form-inp"
+        placeholder="repo1,repo2,..." aria-label="repos" aria-describedby="basic-addon2"
+        (keyup)="getOption(repos.value)" [ngbTypeahead]="repoOptions" (selectItem)="callAPI($event.item,'')" />
                 <div class="input-group-append" style="height: 100%">
-                  <button class="btn" type="submit" style="height: 100%">
+                  <button *ngIf="!isOptionsLoading" class="btn" type="submit" style="height: 100%">
                     <mat-icon>search</mat-icon>
                   </button>
+                  <mat-progress-spinner mode="indeterminate" [diameter]="20" *ngIf="isOptionsLoading" style="margin-top: 10px;margin-right: 10px;"></mat-progress-spinner>
                 </div>
               </div>
             </form>
@@ -49,12 +51,14 @@
             *ngIf="toggleVal == 'Topic'">
             <form (submit)="callAPI('',Topic.value)" style="width: 100%;">
               <div class="input-group mb-3 form-div">
-                <input type="text" #Topic required class="form-control form-inp" placeholder="topic-name"
-                  aria-label="topic" aria-describedby="basic-addon2" />
+                <input type="text" #Topic required class="form-control form-inp"
+                  placeholder="topic-name" aria-label="topic" aria-describedby="basic-addon2"
+                  (keyup)="getOption(Topic.value)" autocomplete="off" [ngbTypeahead]="topicOptions" (selectItem)="callAPI('',$event.item)"/>
                 <div class="input-group-append" style="height: 100%">
-                  <button class="btn" type="submit" style="height: 100%">
+                  <button *ngIf="!isOptionsLoading" class="btn" type="submit" style="height: 100%">
                     <mat-icon>search</mat-icon>
                   </button>
+                  <mat-progress-spinner mode="indeterminate" [diameter]="20" *ngIf="isOptionsLoading" style="margin-top: 10px;margin-right: 10px;"></mat-progress-spinner>
                 </div>
               </div>
             </form>
@@ -221,12 +225,11 @@
     </div>
   </div>
   <div class="d-flex justify-content-start footer-div" style="background-color:#0b385b;">
-    <div class="col-sm-4" style="padding-top: 10px;padding-left: 10px; font-size: small; color: white;">Version: 1.1.0
+    <div class="col-sm-4" style="padding-top: 10px;padding-left: 10px; font-size: small; color: white;">Version: 1.2.0
     </div>
-    <div class="col-sm-4 d-flex justify-content-center align-content-center" >
+    <div class="col-sm-4 d-flex justify-content-center align-content-center">
       <p style="padding-top:10px;font-size: small; color: white;">Developed By</p>
-      <img class="footer-img" src="assets/images/global-presales-logo.png"
-        alt="global presales logo" />
+      <img class="footer-img" src="assets/images/global-presales-logo.png" alt="global presales logo" />
     </div>
   </div>
 </body>
