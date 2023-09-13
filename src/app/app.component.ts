@@ -24,7 +24,10 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { ViewEncapsulation } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { Observable, OperatorFunction } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import * as crypto from 'crypto-js';
+
 
 export interface column {
   value: string;
@@ -39,7 +42,23 @@ export interface column {
 })
 
 export class AppComponent {
-
+  model: any;
+  repoOptions: OperatorFunction<string, readonly string[]> = (text$: Observable<string>) =>
+		text$.pipe(
+			debounceTime(1000),
+			distinctUntilChanged(),
+			map((term) =>
+				term.length < 4 ? [] : this.repositories.filter((v) => v.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10),
+			),
+		);
+    topicOptions: OperatorFunction<string, readonly string[]> = (text$: Observable<string>) =>
+		text$.pipe(
+			debounceTime(1000),
+			distinctUntilChanged(),
+			map((term) =>
+				term.length < 4 ? [] : this.topics.filter((v) => v.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10),
+			),
+		);
   columns = new FormControl();
   allCols: column[] = [
     { value: 'repository', viewValue: 'Repository' },
@@ -65,6 +84,7 @@ export class AppComponent {
   dataSource: any;
   lable_names: string[] = [];
   isLoading: boolean | undefined;
+  isOptionsLoading:boolean=false;
   pullCheck: boolean = false;
   progressValue: number = 5;
   dataNotFound: boolean = false;
@@ -72,11 +92,13 @@ export class AppComponent {
   isInputNull:boolean=false;
   errorMessage: string | undefined;
   constructor(private http: HttpClient, public dialog: MatDialog) { }
+  repositories:string[]=[];
+  topics:string[]=[];
   displayedColumns = ['repository', 'issue_number', 'title', 'body', 'user_name', 'lable_name', 'created_at', 'updated_at'];
   accessKey = "1617169566033";
   devMainURL = "U2FsdGVkX1/SY9wnkxUkrlQvGD7b9mxOqY9OatFNQLKMn/02eNQ2OrQu4yHgpqQMEeaPqHlRXjtc8iaaNSbN8MJA6BFhNqLuhde2Jg/gh6lv1495pohf9vEWb0Vkc2yt2hh2pMJIAYX4a+vm0Zl8vg=="
   prodMainURL = "U2FsdGVkX18utO43TS/VRwUZaz/p9Wl4OWmBP28z6p4O2SdCtZEH/+Zb7EGy05/zQmgmQu2MWkzxi/+dU0KYlaZrGlMh0ci6riHQhb5Wuk6Y+EEDLd1Fn6Ok3f4WfIB4"
-  headers = { 'Contet-Type': 'application/json' };
+  headers = { 'Content-Type': 'application/json' };
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   public onToggleChange(val: string) {
@@ -86,6 +108,43 @@ export class AppComponent {
     this.displayedColumns = selected;
   }
 
+  getOption(search:string){
+    if(search.length>4){
+      this.isOptionsLoading=true;
+      let gitURL="U2FsdGVkX1+MD/brytDZVcNVN0x8oxlEutTKcIhdthunrrY/aeuEsXXFyIhvjeyHV+jiPXJ+Y7onMboCH8NRQoVXJPCBL+b28prJ9DZQUzjyZ1JvIPMq4UG3a+2GDehtN9F4oJEsBzcN4cNJKGIIzg==";
+      let gitBaseURL = crypto.AES.decrypt(gitURL.toString(), this.accessKey).toString(crypto.enc.Utf8);
+      if(this.toggleVal=='Topic'){
+        let url=gitBaseURL+"topics?q="+search;
+        this.http.get<JSON>(url, { headers: this.headers, params: {per_page:10 } }).subscribe((data) => this.gettingOptions(data), (error) => this.gettingOptionsError());
+      }
+      else{
+        let url=gitBaseURL+"repositories?q=org:softwareag+"+search+"+in:name";
+        this.http.get<JSON>(url, { headers: this.headers, params: { sort:'name', order:'asc',per_page:10} }).subscribe((data) => this.gettingOptions(data),(error) => this.gettingOptionsError());
+      }
+    }   
+  }
+  gettingOptionsError(){
+    this.isOptionsLoading=false;
+  }
+  gettingOptions(data:any){
+    if(this.toggleVal=='Topic'){
+      this.topics=[];
+    if(data.items){
+      for(let i=0;i<data.items.length;i++){
+        this.topics.push(data.items[i].name);
+      }
+    }
+    }
+    else{
+      this.repositories=[];
+    if(data.items){
+      for(let i=0;i<data.items.length;i++){
+        this.repositories.push(data.items[i].name);
+      }
+    }
+    }
+    this.isOptionsLoading=false;
+  }
   callAPI(Repos: string, Topic: string) {
     if (!(Repos == '' && Topic == '')) {
       let prodURL = crypto.AES.decrypt(this.prodMainURL.toString(), this.accessKey).toString(crypto.enc.Utf8);
@@ -139,7 +198,6 @@ export class AppComponent {
         this.closedList.push(this.issues[i]);
       }
     }
-    console.log(this.pullList);
     this.progressValue = 100;
     this.isLoading = false;
     this.dataSource = new MatTableDataSource(this.issueList);
@@ -187,10 +245,6 @@ export class AppComponent {
   bodyDialog(cell: any) {
     const bodyDialogRef = this.dialog.open(bodyDialogView, { width: '700px', height: '300px', data: cell });
   }
-
-
-
-
 
   applyFilter(event: any) {
     this.dataSource.filter = event.target.value.trim().toLowerCase();
