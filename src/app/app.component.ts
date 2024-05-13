@@ -96,8 +96,7 @@ export class AppComponent {
   topics:string[]=[];
   displayedColumns = ['repository', 'issue_number', 'title', 'body', 'user_name', 'lable_name', 'created_at', 'updated_at'];
   accessKey = "1617169566033";
-  devMainURL = "U2FsdGVkX1/SY9wnkxUkrlQvGD7b9mxOqY9OatFNQLKMn/02eNQ2OrQu4yHgpqQMEeaPqHlRXjtc8iaaNSbN8MJA6BFhNqLuhde2Jg/gh6lv1495pohf9vEWb0Vkc2yt2hh2pMJIAYX4a+vm0Zl8vg=="
-  prodMainURL = "U2FsdGVkX18utO43TS/VRwUZaz/p9Wl4OWmBP28z6p4O2SdCtZEH/+Zb7EGy05/zQmgmQu2MWkzxi/+dU0KYlaZrGlMh0ci6riHQhb5Wuk6Y+EEDLd1Fn6Ok3f4WfIB4"
+  encodedAWSBaseUrl='U2FsdGVkX1/Nj+14MglrWvOj/cUtCFZqcqJA/BSGGh6aN4GZNIg/4FUWodBxGhdfGKtGbg2/dzTJR8OkpEG6LOd4U2nYVrC8iHV4FOWeZ0Y=';
   headers = { 'Content-Type': 'application/json' };
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -111,15 +110,13 @@ export class AppComponent {
   getOption(search:string){
     if(search.length>4){
       this.isOptionsLoading=true;
-      let gitURL="U2FsdGVkX1+MD/brytDZVcNVN0x8oxlEutTKcIhdthunrrY/aeuEsXXFyIhvjeyHV+jiPXJ+Y7onMboCH8NRQoVXJPCBL+b28prJ9DZQUzjyZ1JvIPMq4UG3a+2GDehtN9F4oJEsBzcN4cNJKGIIzg==";
-      let gitBaseURL = crypto.AES.decrypt(gitURL.toString(), this.accessKey).toString(crypto.enc.Utf8);
       if(this.toggleVal=='Topic'){
-        let url=gitBaseURL+"topics?q="+search;
-        this.http.get<JSON>(url, { headers: this.headers, params: {per_page:10 } }).subscribe((data) => this.gettingOptions(data), (error) => this.gettingOptionsError());
+        let TopicOptionsUrl= crypto.AES.decrypt(this.encodedAWSBaseUrl.toString(), this.accessKey).toString(crypto.enc.Utf8)+`search/topics?q=${search}`;
+        this.http.get<JSON>(TopicOptionsUrl, { headers: this.headers , params: {per_page:10 } }).subscribe((data) => this.gettingOptions(data), (error) => this.gettingOptionsError());
       }
       else{
-        let url=gitBaseURL+"repositories?q=org:softwareag+"+search+"+in:name";
-        this.http.get<JSON>(url, { headers: this.headers, params: { sort:'name', order:'asc',per_page:10} }).subscribe((data) => this.gettingOptions(data),(error) => this.gettingOptionsError());
+        let RepoOptionsUrl= crypto.AES.decrypt(this.encodedAWSBaseUrl.toString(), this.accessKey).toString(crypto.enc.Utf8)+`search/repositories?q=org:SoftwareAG+${search}+in:name`;
+        this.http.get<JSON>(RepoOptionsUrl, { headers: this.headers, params: { sort:'name', order:'asc',per_page:10} }).subscribe((data) => this.gettingOptions(data),(error) => this.gettingOptionsError());
       }
     }   
   }
@@ -147,8 +144,6 @@ export class AppComponent {
   }
   async callAPI(Repos: string, Topic: string) {
     if (!(Repos == '' && Topic == '')) {
-      // let prodURL = crypto.AES.decrypt(this.prodMainURL.toString(), this.accessKey).toString(crypto.enc.Utf8);
-      // let devURL = crypto.AES.decrypt(this.devMainURL.toString(), this.accessKey).toString(crypto.enc.Utf8);
       this.submitClicked = true;
       this.isLoading = true;
       this.dataNotFound = false;
@@ -163,12 +158,6 @@ export class AppComponent {
         setTimeout(() => { this.progressValue = 75 }, 15000);
         setTimeout(() => { this.progressValue = 90 }, 20000);
       }
-      // if (isDevMode()) {
-      //   this.http.get<JSON>(devURL, { headers: this.headers, params: { repos: Repos, topic: Topic } }).subscribe((data) => this.displayIssues(data), (error) => this.errorOccured(error));
-      // }
-      // else {
-      //   this.http.get<JSON>(prodURL, { headers: this.headers, params: { repos: Repos, topic: Topic } }).subscribe((data) => this.displayIssues(data), (error) => this.errorOccured(error));
-      // }
       let data=await this.repoVizSerive.main(Repos.split(','),Topic);
       this.displayIssues(data);
     }
@@ -182,6 +171,11 @@ export class AppComponent {
     this.allIssueList = [];
     this.progressValue = 90;
     this.issues = data.issues;
+    if(!data.issues){
+      this.progressValue=100;
+      this.isLoading = false;
+      this.dataNotFound=true;
+    }
     let len = this.issues.length;
     for (let i = 0; i < len; i++) {
       if (!(this.issues[i].hasOwnProperty("lables"))) {
