@@ -27,7 +27,7 @@ import { FormControl } from '@angular/forms';
 import { Observable, OperatorFunction } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import * as crypto from 'crypto-js';
-
+import { repoVizService } from './repoVizService';
 
 export interface column {
   value: string;
@@ -91,7 +91,7 @@ export class AppComponent {
   isErrorOccured: boolean = false;
   isInputNull:boolean=false;
   errorMessage: string | undefined;
-  constructor(private http: HttpClient, public dialog: MatDialog) { }
+  constructor(private http: HttpClient, public dialog: MatDialog, public repoVizSerive:repoVizService) { }
   repositories:string[]=[];
   topics:string[]=[];
   displayedColumns = ['repository', 'issue_number', 'title', 'body', 'user_name', 'lable_name', 'created_at', 'updated_at'];
@@ -145,10 +145,10 @@ export class AppComponent {
     }
     this.isOptionsLoading=false;
   }
-  callAPI(Repos: string, Topic: string) {
+  async callAPI(Repos: string, Topic: string) {
     if (!(Repos == '' && Topic == '')) {
-      let prodURL = crypto.AES.decrypt(this.prodMainURL.toString(), this.accessKey).toString(crypto.enc.Utf8);
-      let devURL = crypto.AES.decrypt(this.devMainURL.toString(), this.accessKey).toString(crypto.enc.Utf8);
+      // let prodURL = crypto.AES.decrypt(this.prodMainURL.toString(), this.accessKey).toString(crypto.enc.Utf8);
+      // let devURL = crypto.AES.decrypt(this.devMainURL.toString(), this.accessKey).toString(crypto.enc.Utf8);
       this.submitClicked = true;
       this.isLoading = true;
       this.dataNotFound = false;
@@ -163,12 +163,14 @@ export class AppComponent {
         setTimeout(() => { this.progressValue = 75 }, 15000);
         setTimeout(() => { this.progressValue = 90 }, 20000);
       }
-      if (isDevMode()) {
-        this.http.get<JSON>(devURL, { headers: this.headers, params: { repos: Repos, topic: Topic } }).subscribe((data) => this.displayIssues(data), (error) => this.errorOccured(error));
-      }
-      else {
-        this.http.get<JSON>(prodURL, { headers: this.headers, params: { repos: Repos, topic: Topic } }).subscribe((data) => this.displayIssues(data), (error) => this.errorOccured(error));
-      }
+      // if (isDevMode()) {
+      //   this.http.get<JSON>(devURL, { headers: this.headers, params: { repos: Repos, topic: Topic } }).subscribe((data) => this.displayIssues(data), (error) => this.errorOccured(error));
+      // }
+      // else {
+      //   this.http.get<JSON>(prodURL, { headers: this.headers, params: { repos: Repos, topic: Topic } }).subscribe((data) => this.displayIssues(data), (error) => this.errorOccured(error));
+      // }
+      let data=await this.repoVizSerive.main(Repos.split(','),Topic);
+      this.displayIssues(data);
     }
   }
 
