@@ -1,3 +1,21 @@
+/*
+* Copyright (c) 2024 Software AG, Darmstadt, Germany and/or its licensors
+*
+* SPDX-License-Identifier: Apache-2.0
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*    http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+ */
+
 import { HttpClient } from '@angular/common/http';
 import { issues } from './models';
 import { Injectable } from '@angular/core';
@@ -7,7 +25,7 @@ import * as crypto from 'crypto-js';
 @Injectable()
 export class repoVizService{
     accessKey = "1617169566033";
-    encodedAWSBaseUrl='U2FsdGVkX1/Nj+14MglrWvOj/cUtCFZqcqJA/BSGGh6aN4GZNIg/4FUWodBxGhdfGKtGbg2/dzTJR8OkpEG6LOd4U2nYVrC8iHV4FOWeZ0Y=';
+    encodedAWSProdUrl='U2FsdGVkX18IjsAEYjiPjDk0V1yUov5ZtGgnQmDfvrcJQTMbsV9Xtysa1EjyJmRpzC4WYI1WGOwHJU3wLVm+xWM+bSiC1vOHO9oimtf1Og8=';
     constructor(private http:HttpClient, private datePipe:DatePipe){};
     //All functions are as per flowservice logic
 
@@ -36,7 +54,7 @@ export class repoVizService{
             let len:number=101;
             do {
                 pageNumber++;
-                let url= crypto.AES.decrypt(this.encodedAWSBaseUrl.toString(), this.accessKey).toString(crypto.enc.Utf8)+`${repo}/issues`;
+                let url= crypto.AES.decrypt(this.encodedAWSProdUrl.toString(), this.accessKey).toString(crypto.enc.Utf8)+`${repo}/issues`;
                 let params={page:`${pageNumber}`};
                 const data=await this.fetch(url,params);
                 issueForRepo.push(...data);
@@ -68,12 +86,12 @@ export class repoVizService{
 
     async getReposInTopic(topic:string):Promise<string[]>{
         let result:string[]=[];
-        let url= crypto.AES.decrypt(this.encodedAWSBaseUrl.toString(), this.accessKey).toString(crypto.enc.Utf8)+`search/repositories?q=org:SoftwareAG+topic:${topic}&page=1&per_page=1&type=public&sort=created`;
+        let url= crypto.AES.decrypt(this.encodedAWSProdUrl.toString(), this.accessKey).toString(crypto.enc.Utf8)+`search/repositories?q=org:SoftwareAG+topic:${topic}&page=1&per_page=1&type=public&sort=created`;
         const data=await this.fetch(url);
         let totalCount=data.total_count;
         let i=1;
         while(totalCount>0){
-            let topicUrl= crypto.AES.decrypt(this.encodedAWSBaseUrl.toString(), this.accessKey).toString(crypto.enc.Utf8)+`search/repositories?q=org:SoftwareAG+topic:${topic}&page=${i}&per_page=100`;
+            let topicUrl= crypto.AES.decrypt(this.encodedAWSProdUrl.toString(), this.accessKey).toString(crypto.enc.Utf8)+`search/repositories?q=org:SoftwareAG+topic:${topic}&page=${i}&per_page=100`;
             const topicData=await this.fetch(topicUrl);
             for(let item of topicData?.items){
                 result.push(item?.name);

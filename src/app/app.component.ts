@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2023 Software AG, Darmstadt, Germany and/or its licensors
+* Copyright (c) 2024 Software AG, Darmstadt, Germany and/or its licensors
 *
 * SPDX-License-Identifier: Apache-2.0
 *
@@ -16,7 +16,7 @@
 * limitations under the License.
  */
 
-import { Component, ViewChild, Inject, isDevMode } from '@angular/core';
+import { Component, ViewChild, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
@@ -96,7 +96,7 @@ export class AppComponent {
   topics:string[]=[];
   displayedColumns = ['repository', 'issue_number', 'title', 'body', 'user_name', 'lable_name', 'created_at', 'updated_at'];
   accessKey = "1617169566033";
-  encodedAWSBaseUrl='U2FsdGVkX1/Nj+14MglrWvOj/cUtCFZqcqJA/BSGGh6aN4GZNIg/4FUWodBxGhdfGKtGbg2/dzTJR8OkpEG6LOd4U2nYVrC8iHV4FOWeZ0Y=';
+  encodedAWSProdUrl='U2FsdGVkX18IjsAEYjiPjDk0V1yUov5ZtGgnQmDfvrcJQTMbsV9Xtysa1EjyJmRpzC4WYI1WGOwHJU3wLVm+xWM+bSiC1vOHO9oimtf1Og8=';
   headers = { 'Content-Type': 'application/json' };
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -111,11 +111,11 @@ export class AppComponent {
     if(search.length>4){
       this.isOptionsLoading=true;
       if(this.toggleVal=='Topic'){
-        let TopicOptionsUrl= crypto.AES.decrypt(this.encodedAWSBaseUrl.toString(), this.accessKey).toString(crypto.enc.Utf8)+`search/topics?q=${search}`;
+        let TopicOptionsUrl= crypto.AES.decrypt(this.encodedAWSProdUrl.toString(), this.accessKey).toString(crypto.enc.Utf8)+`search/topics?q=${search}`;
         this.http.get<JSON>(TopicOptionsUrl, { headers: this.headers , params: {per_page:10 } }).subscribe((data) => this.gettingOptions(data), (error) => this.gettingOptionsError());
       }
       else{
-        let RepoOptionsUrl= crypto.AES.decrypt(this.encodedAWSBaseUrl.toString(), this.accessKey).toString(crypto.enc.Utf8)+`search/repositories?q=org:SoftwareAG+${search}+in:name`;
+        let RepoOptionsUrl= crypto.AES.decrypt(this.encodedAWSProdUrl.toString(), this.accessKey).toString(crypto.enc.Utf8)+`search/repositories?q=org:SoftwareAG+${search}+in:name`;
         this.http.get<JSON>(RepoOptionsUrl, { headers: this.headers, params: { sort:'name', order:'asc',per_page:10} }).subscribe((data) => this.gettingOptions(data),(error) => this.gettingOptionsError());
       }
     }   
