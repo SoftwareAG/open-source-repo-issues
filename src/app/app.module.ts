@@ -25,7 +25,8 @@ import {FormsModule,ReactiveFormsModule} from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClientModule } from '@angular/common/http';
 import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
-import { JsonPipe } from '@angular/common';
+import { DatePipe, JsonPipe } from '@angular/common';
+import { repoVizService } from './repoVizService';
 
 
 @NgModule({
@@ -44,7 +45,7 @@ import { JsonPipe } from '@angular/common';
     NgbTypeaheadModule,
     JsonPipe
   ],
-  providers: [],
+  providers: [repoVizService,DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
